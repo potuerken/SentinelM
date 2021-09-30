@@ -41,18 +41,7 @@ namespace SentinelMvcV.Helpers
 
         public static async Task<string> GetAll(string controller, string action)
         {
-            //serviceUrl = $"{url}auth/login";
-
-            //StringContent httpcontent = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
-
-            //using (var response = await client.PostAsync(serviceUrl, httpcontent))
-            //{
-            //    response.EnsureSuccessStatusCode();
-            //    return await response.Content.ReadAsStringAsync();
-            //}
-
             serviceUrl = $"{url}{controller}/{action}";
-
 
             using (HttpResponseMessage response = await client.GetAsync(serviceUrl))
             {

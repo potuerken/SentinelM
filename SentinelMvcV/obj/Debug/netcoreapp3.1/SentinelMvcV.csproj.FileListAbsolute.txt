@@ -108,3 +108,4 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\st
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.pdb
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.genruntimeconfig.cache
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.csprojAssemblyReference.cache

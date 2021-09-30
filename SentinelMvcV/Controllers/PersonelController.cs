@@ -23,7 +23,7 @@ namespace SentinelMvcV.Controllers
                 jwtToken = tkn;
         }
 
-       
+       [HttpGet]
         public IActionResult PersonelListesi()
         {
             PersonelService.SetToken = jwtToken;
