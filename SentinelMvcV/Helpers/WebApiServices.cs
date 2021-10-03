@@ -21,7 +21,9 @@ namespace SentinelMvcV.Helpers
             set
             {
                 if (value != null)
+                {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value);
+                }
             }
         }
 
@@ -45,14 +47,19 @@ namespace SentinelMvcV.Helpers
 
             using (HttpResponseMessage response = await client.GetAsync(serviceUrl))
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", null);
+                    return null;
+                }
                 var result = response.Content.ReadAsStringAsync();
                 return await result;
             }
         }
 
-        public static async Task<string> GetSingle(string controller, string action, int id)
+        public static async Task<string> GetSingle(string controller, string action, string parametreName, short id)
         {
-            serviceUrl = $"{url}{controller}/{action}/{id}";
+            serviceUrl = $"{url}{controller}/{action}/{parametreName}{id}";
             using (var response = await client.GetAsync(serviceUrl))
             {
                 return await response.Content.ReadAsStringAsync();

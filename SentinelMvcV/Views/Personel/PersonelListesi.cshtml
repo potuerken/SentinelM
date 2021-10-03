@@ -1,8 +1,594 @@
-﻿
+﻿@using Check.DTO;
+@using SentinelMvcV.ViewModel;
+@model PersonelViewModel
 @{
-    ViewData["Title"] = "PersonelListesi";
+    ViewData["Title"] = "Personel Listesi";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<PersonelDTO> tumList = (List<PersonelDTO>)TempData["PersonelListesi"];
+    List<KodDTO> cinsiyetDD = (List<KodDTO>)TempData["CinsiyetDD"];
+    List<KodDTO> rutbeDD = (List<KodDTO>)TempData["RutbeDD"];
+    List<KodDTO> subeDD = (List<KodDTO>)TempData["SubeDD"];
+
+    var AddedSuccessMessage = (string)TempData["AddedSuccessMessage"];
+    var AddedFailedMessage = (string)TempData["AddedFailedMessage"];
+
+    //var UpdateSuccessMessage = (string)TempData["UpdateSuccessMessage"];
+    //var UpdateFailedMessage = (string)TempData["UpdateFailedMessage"];
+
+    List<SelectListItem> cinsiyetList = new List<SelectListItem>();
+    foreach (var item in cinsiyetDD)
+    {
+        cinsiyetList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
+
+
+    List<SelectListItem> rutbeList = new List<SelectListItem>();
+    foreach (var item in rutbeDD)
+    {
+        rutbeList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
+
+    List<SelectListItem> subeList = new List<SelectListItem>();
+    foreach (var item in subeDD)
+    {
+        subeList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
 }
 
-<h1>PersonelListesi</h1>
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <button style="margin-top:10px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddedPersonelModal" onclick="AddedPersonelModalReflesh()">
+                    Yeni Personel Ekle
+                </button>
+            </div>
+            <div class="col-md-10"></div>
+        </div>
+        @if (AddedSuccessMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-success" role="alert">
+                <span>@AddedSuccessMessage</span>
+            </div>
+        }
+        @if (AddedFailedMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-danger" role="alert">
+                <span>@AddedFailedMessage</span>
+            </div>
+        }
+        <div class="mb-2"></div>
+
+        <table id="DTPersonelListesi" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th style="text-align:center">Sicil</th>
+                    <th style="text-align:center">Tckn</th>
+                    <th style="text-align:center">Ad</th>
+                    <th style="text-align:center">Soyad</th>
+                    <th style="text-align:center">Cinsiyet</th>
+                    <th style="text-align:center">Rütbe</th>
+                    <th style="text-align:center">Şube</th>
+                    <th style="text-align:center">Nöbet Durumu</th>
+                    <th style="text-align:center">Çocuk Durumu</th>
+                    <th style="text-align:center">Cep No</th>
+                    <th style="text-align:center">Dahili</th>
+                    <th style="text-align:center">Birimde Başlama Tarihi</th>
+                    <th style="text-align:center">Detay</th>
+                    <th style="text-align:center">Düzenle</th>
+                    <th style="text-align:center">İlişiği Kes</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (PersonelDTO item in tumList)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@item.Sicil</td>
+                        <td>@item.Tckn</td>
+                        <td>@item.Ad</td>
+                        <td>@item.Soyad</td>
+                        <td>@item.CinsiyetKod.Ad</td>
+                        <td>@item.RutbeKod.Ad</td>
+                        <td>@item.SubeKod.Ad</td>
+                        <td>@item.NobetDurumu</td>
+                        <td>@item.CocukDurum</td>
+                        <td>@item.CepNo</td>
+                        <td>@item.Dahili</td>
+                        <td>@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))</td>
+                        <td style="text-align:center">@Html.ActionLink("Detay", "PersonelDetail", "Personel", null, new { @class = "btn btn-success btn-block" })</td>
+
+
+
+                        @*<td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#exampleModal" onClick="duzenleIleti('@item.AracID','@item.tescilTuruDto.TescilTuruID' , '@item.aracCinsDto.AracCinsID', '@item.yakitTuruDto.YakitTuruID', '@item.Plaka', '@item.Marka', '@item.Model', '@item.ModelYili', '@item.BelgeSeriNo', '@item.MuayeneGecerlilikTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SasiNumarasi', '@item.AracGoreveBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.AracNotu', '@item.IlkKayitTarihi', '@item.GirisKM')">Düzenle</button></td>
+
+
+
+
+
+                            <td style="text-align:center"><button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#silModal" onClick="silIleti('@item.AracID','@item.tescilTuruDto.TescilTuruID' , '@item.aracCinsDto.AracCinsID', '@item.yakitTuruDto.YakitTuruID', '@item.Plaka', '@item.Marka', '@item.Model', '@item.ModelYili', '@item.BelgeSeriNo', '@item.MuayeneGecerlilikTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SasiNumarasi', '@item.AracGoreveBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.AracNotu', '@item.IlkKayitTarihi', '@item.GirisKM')">Sil</button></td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@*Ekle Modalı*@
+@using (Html.BeginForm("PersonelCrud", "Personel", FormMethod.Post))
+{
+    <div class="modal fade bd-example-modal-lg" id="AddedPersonelModal" tabindex="-1" role="dialog" aria-labelledby="AddedPersonelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddedPersonelModalLabel">Yeni Personel Ekleme İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="AddedPersonelModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Sicil, new { @class = "form-control", @id = "txtPersonelSicilAdded", @placeholder = "personel sicil bilgisi", @required = "required", @minlength = "6", @maxlenght = "6", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Tckn, new { @class = "form-control", @id = "txtPersonelTcknAdded", @placeholder = "personel tc bilgisi", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Ad, new { @class = "form-control", @id = "txtPersonelAdAdded", @placeholder = "personel ad bilgisi", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Soyad, new { @class = "form-control", @id = "txtPersonelSoyadAdded", @placeholder = "personel soyad biglsii", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.CinsiyetKod.Id, cinsiyetList, "cinsiyeti seçiniz", new { @class = "form-control", id = "txtPersonelCinsiyetIdAdded", @required = "required", @placeholder = "personel cinsiyet bilgisi", data_live_search = "true" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.RutbeKod.Id, rutbeList, "personelin rütbesini seçiniz", new { @class = "form-control", @id = "txtPersonelRutbeIdAdded", @required = "required", @placeholder = "personel rütbe bilgisi", data_live_search = "true" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.BirimBaslamaTarihi, new { @class = "form-control", @id = "txtPersonelBaslamaTarihiAdded", @placeholder = "personel birimde başlama tarihi", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.SubeKod.Id, subeList, "personel şubesini seçiniz", new { @class = "form-control", @id = "txtPersonelSubeIdAdded", @required = "required", @placeholder = "personel şube bilgisi", data_live_search = "true" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.CheckBoxFor(a => a.CrudPersonelDTO.NobetTutabilirMi, new { @class = "checkbox", @id = "txtPersonelNobetTutabilirMiAdded" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.CheckBoxFor(a => a.CrudPersonelDTO.CocukDurumu, new { @class = "checkbox", @id = "txtPersonelCocukDurumuAdded" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.CepNo, new { @class = "form-control", @id = "txtPersonelCepNoAdded", @placeholder = "personel cep no", @required = "required", @minlength = "3", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="mb-3">@Html.DisplayNameFor(a=>a.CrudPersonelDTO.Dahili)</div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Dahili, new { @class = "form-control", @id = "txtPersonelDahiliAdded", @placeholder = "personel dahili telefon", @required = "required", @minlength = "5", @maxlenght = "5", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AddedPersonelModalReflesh()">Kapat</button>
+                    <button id="btnEkle" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+
+    $('#txtPersonelSicilAdded').mask('999999');
+    $('#txtPersonelTcknAdded').mask('99999999999');
+    $('#txtPersonelDahiliAdded').mask('99999');
+    $('#txtPersonelCepNoAdded').mask('000-000-00-00');
+
+    var tarih = new Date();
+    var yil = tarih.getFullYear();
+    var ay = tarih.getMonth();
+    var gun = tarih.getDate();
+    var saat = tarih.getHours();
+    var dakika = tarih.getMinutes();
+    var saniye = tarih.getSeconds();
+
+
+    $(document).ready(function () {
+        $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+        $(function () {
+            $('#txtPersonelCinsiyetIdAdded').selectpicker(
+
+            );
+        });
+
+        $(function () {
+            $('#txtPersonelRutbeIdAdded').selectpicker(
+
+            );
+        });
+
+        $(function () {
+            $('#txtPersonelSubeIdAdded').selectpicker(
+
+            );
+        });
+
+        //$(function () {
+        //    $('#txtAracTescilIdDuzenle').selectpicker(
+
+        //    );
+        //});
+        //$(function () {
+        //    $('#txtAracCinsIdDuzenle').selectpicker(
+
+        //    );
+        //});
+        //$(function () {
+        //    $('#txtAracYakitIdDuzenle').selectpicker(
+
+        //    );
+        //});
+        //$(function () {
+        //    $('#txtAracTescilIdSil').selectpicker(
+
+        //    );
+        //});
+        //$(function () {
+        //    $('#txtAracCinsIdSil').selectpicker(
+
+        //    );
+        //});
+        //$(function () {
+        //    $('#txtAracYakitIdSil').selectpicker(
+
+        //    );
+        //});
+
+        //$("#txtPersonelCinsiyetIdAdded").change(function () {
+        //    var id = $(this).val();
+        //    var cinsDD = $("#txtPersonelRutbeIdAdded");
+        //    cinsDD.empty();
+        //    $('#txtPersonelRutbeIdAdded').prop('disabled', true);
+        //    $('#txtPersonelRutbeIdAdded').selectpicker('refresh');
+        //    $.ajax({
+        //        url: '/SAK/CinsDoldur',
+        //        type: 'POST',
+        //        dataType: 'json',
+        //        data: { 'tescilID': id },
+        //        success: function (data) {
+        //            if (data.length > 0) {
+        //                cinsDD.append("<option value='0'>araç cinsini seçiniz</option>");
+        //                $.each(data, function (index, option) {
+        //                    cinsDD.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+        //                });
+        //                $('#txtPersonelRutbeIdAdded').prop('disabled', false);
+        //                $('#txtPersonelRutbeIdAdded').selectpicker('refresh');
+        //            }
+        //        }
+        //    });
+        //});
+
+        //$("#txtAracTescilIdDuzenle").change(function () {
+        //    var id = $(this).val();
+        //    var cinsDD = $("#txtAracCinsIdDuzenle");
+        //    cinsDD.empty();
+        //    $('#txtAracCinsIdDuzenle').prop('disabled', true);
+        //    $('#txtAracCinsIdDuzenle').selectpicker('refresh');
+        //    $.ajax({
+        //        url: '/SAK/CinsDoldur',
+        //        type: 'POST',
+        //        dataType: 'json',
+        //        data: { 'tescilID': id },
+        //        success: function (data) {
+        //            if (data.length > 0) {
+        //                cinsDD.append("<option value='0'>araç cinsini seçiniz</option>");
+        //                $.each(data, function (index, option) {
+        //                    cinsDD.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+        //                });
+        //                $('#txtAracCinsIdDuzenle').prop('disabled', false);
+        //                $('#txtAracCinsIdDuzenle').selectpicker('refresh');
+        //            }
+        //        }
+        //    });
+        //});
+
+        var table = $('#DTPersonelListesi').DataTable({
+            dom: 'Bfrtip',
+            // Page kaçlı listeler halinde gelmesi için
+            lengthChange: false,
+            // Page li kısmın buton şeklinde görünmesi için
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 Kayıt', '25 Kayıt', '50 Kayıt', 'Tümü']
+            ],
+            // Çıktı Butonları
+            buttons: [
+                { extend: 'copy', text: 'Kopyala' },
+                {
+                    // Çıktının tipi
+                    extend: 'excel',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    text: 'Excel'
+                },
+                // Kaçlı listeler halinde görünsün
+                { extend: 'pageLength', text: 'Görüntülenme' },
+                // PDF olarak çıktı al
+                // PDF olarak çıktı al
+                {
+                    // Çıktının tipi
+                    extend: 'pdf',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    orientation: 'landscape',
+                },
+                // Sütunlardan hangisi görünsün
+                { extend: 'colvis', text: 'Sütun Gizle/Göster' }],
+            language: {
+                "emptyTable": "Mevcut veri yok.",
+                "info": "Toplam _TOTAL_ kayıttan _START_ ile _END_ arasındaki kayıtlar.",
+                "infoEmpty": "Arama sonucu veri bulunamadı.",
+                "infoFiltered": "(toplam _MAX_ kayıt içinde arandı.)",
+                "loadingRecords": "Yükleniyor...",
+                "search": "Ara:",
+                "zeroRecords": "Hiçbir eşleşen kayıt bulunamadı",
+                "paginate": {
+                    "first": "İlk",
+                    "last": "Son",
+                    "next": "Sonraki",
+                    "previous": "Önceki"
+                }
+            },
+            // Alttaki sayfa numaralarının hepsi görünsün
+            "pagingType": "full_numbers",
+            // Sütunların sıralamasını kullanıcının değiştirilebilir olması yapar.
+            colReorder: true,
+            // columnDef özelliğini açar olarak anladım.
+            rowReorder: true,
+            // Targets olarak seçtiğin indeks sıralamasına göre sütunların order özelliği açılır kapanır.
+            columnDefs: [
+                { width: '4%', targets: 0 },
+                { searchable: true, orderable: true, className: 'reorder', targets: [1, 2, 3, 5, 7, 10, 12] },
+                { searchable: false, orderable: false, targets: '_all' }
+            ],
+            "scrollX": true,
+            order: [[1, "asc"]],
+            stateSave: true
+        });
+
+        table.on('order.dt search.dt', function () {
+            table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+                table.cell(cell).invalidate('dom');
+            });
+        }).draw();
+
+        // Butonların bootstrap tipi görünürlüğü sağlar
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+
+        // Menüdeki üst başlığın kalın olması için
+        $("#listPersonelAnaBaslik").attr('class', 'nav-item active');
+        // Menünün tüm alt başlıklarını açık tutmak için
+        $("#personelMenusu").attr('class', 'collapse show');
+        // Seçilen alt başlığın baskın olması için
+        $("#personelButonu").attr('class', 'collapse-item active');
+        // Seçildiğinde okun aşağı doğru bakması için
+        $("#personelOkYonu").toggleClass('collapsed');
+
+
+
+    });
+
+    function AddedPersonelModalReflesh() {
+        $("#txtPersonelCinsiyetIdAdded").selectpicker('val', null);
+        $("#txtPersonelRutbeIdAdded").selectpicker('val', null);
+        $("#txtPersonelSubeIdAdded").selectpicker('val', null);
+        $("#txtPersonelSicilAdded").val(null);
+        $("#txtPersonelTcknAdded").val(null);
+        $("#txtPersonelAdAdded").val(null);
+        $("#txtPersonelSoyadAdded").val(null);
+        $("#txtPersonelBaslamaTarihiAdded").val(null);
+        $("#txtPersonelCepNoAdded").val(null);
+        $("#txtPersonelDahiliAdded").val(null);
+        $("#NobetTutabilirMi").val(null);
+        $("#CocukDurumu").val(null);
+    }
+
+    //function duzenleIleti(aracId, tescilId, cinsId, yakitId, plaka, marka, model, mYili, belgeseri, muayene, sasi, gorevebas, aracnot, ilkKayit, girisKM) {
+    //    $("#txtAracIdDuzenle").val(aracId);
+    //    $("#txtAracTescilIdDuzenle").selectpicker('val', tescilId);
+    //    $("#txtAracCinsIdDuzenle").selectpicker('val', cinsId);
+    //    $("#txtAracYakitIdDuzenle").selectpicker('val', yakitId);
+    //    $("#txtAracPlakaDuzenle").val(plaka);
+    //    $("#txtAracMarkaDuzenle").val(marka);
+    //    $("#txtAracModelDuzenle").val(model);
+    //    $("#txtAracMYiliDuzenle").val(mYili);
+    //    $("#txtAracBelgeSeriNDuzenle").val(belgeseri);
+    //    $("#txtAracMuayeneDuzenle").val(muayene);
+    //    $("#txtAracSasiDuzenle").val(sasi);
+    //    $("#txtAracGorBasDuz").val(gorevebas);
+    //    $("#txtAracNotDuzenle").val(aracnot);
+    //    $("#txtAracIlkKayitDuzenle").val(ilkKayit);
+    //    $("#txtAracGirisKMDuz").val(girisKM);
+
+    //    var id = $("#txtAracTescilIdDuzenle").val();
+    //    var cinsDD = $("#txtAracCinsIdDuzenle");
+    //    cinsDD.empty();
+    //    $('#txtAracCinsIdDuzenle').prop('disabled', true);
+    //    $('#txtAracCinsIdDuzenle').selectpicker('refresh');
+    //    $.ajax({
+    //        url: '/SAK/CinsDoldur',
+    //        type: 'POST',
+    //        dataType: 'json',
+    //        data: { 'tescilID': id },
+    //        success: function (data) {
+    //            if (data.length > 0) {
+    //                cinsDD.append("<option value='0'>araç cinsini seçiniz</option>");
+    //                $.each(data, function (index, option) {
+    //                    cinsDD.append('<option value=' + option.Value + '>' + option.Text + '</option>');
+    //                });
+    //                cinsDD.val(cinsId);
+    //                $('#txtAracCinsIdDuzenle').prop('disabled', false);
+    //                $('#txtAracCinsIdDuzenle').selectpicker('refresh');
+    //            }
+    //        }
+    //    });
+    //}
+
+    //function duzenleSifirla() {
+    //    $("#txtAracIdDuzenle").val(0);
+    //    $("#txtAracTescilIdDuzenle").val(0);
+    //    $("#txtAracCinsIdDuzenle").val(0);
+    //    $("#txtAracYakitIdDuzenle").val(0);
+    //    $("#txtAracPlakaDuzenle").val(null);
+    //    $("#txtAracMarkaDuzenle").val(null);
+    //    $("#txtAracModelDuzenle").val(null);
+    //    $("#txtAracMYiliDuzenle").val(null);
+    //    $("#txtAracBelgeSeriNDuzenle").val(null);
+    //    $("#txtAracMuayeneDuzenle").val(null);
+    //    $("#txtAracSasiDuzenle").val(null);
+    //    $("#txtAracGorBasDuz").val(null);
+    //    $("#txtAracNotDuzenle").val(null);
+    //    $("#txtAracIlkKayitDuzenle").val(null);
+    //    $("txtAracGirisKMDuz").val(null);
+    //}
+
+    //function silIleti(aracId, tescilId, cinsId, yakitId, plaka, marka, model, mYili, belgeseri, muayene, sasi, gorevebas, aracnot, ilkKayit, girisKM) {
+    //    $("#txtAracIdSil").val(aracId);
+    //    $("#txtAracTescilIdSil").selectpicker('val', tescilId);
+    //    $('#txtAracTescilIdSil').prop('disabled', true);
+    //    $('#txtAracTescilIdSil').selectpicker('refresh');
+    //    $("#txtAracCinsIdSil").selectpicker('val', cinsId);
+    //    $('#txtAracCinsIdSil').prop('disabled', true);
+    //    $('#txtAracCinsIdSil').selectpicker('refresh');
+    //    $("#txtAracYakitIdSil").selectpicker('val', yakitId);
+    //    $('#txtAracYakitIdSil').prop('disabled', true);
+    //    $('#txtAracYakitIdSil').selectpicker('refresh');
+    //    $("#txtAracPlakaSil").val(plaka);
+    //    $("#txtAracMarkaSil").val(marka);
+    //    $("#txtAracModelSil").val(model);
+    //    $("#txtAracMYiliSil").val(mYili);
+    //    $("#txtAracBelgeSeriNSil").val(belgeseri);
+    //    $("#txtAracMuayeneSil").val(muayene);
+    //    $("#txtAracSasiSil").val(sasi);
+    //    $("#txtAracGorBasSil").val(gorevebas);
+    //    $("#txtAracNotSil").val(aracnot);
+    //    $("#txtAracIlkKayitSil").val(ilkKayit);
+    //    $("#txtAracGirisKMSil").val(girisKM);
+
+    //}
+
+    //function silSifirla() {
+    //    $("#txtAracIdSil").val(0);
+    //    $("#txtAracTescilIdSil").val(0);
+    //    $("#txtAracCinsIdSil").val(0);
+    //    $("#txtAracYakitIdSil").val(0);
+    //    $("#txtAracPlakaSil").val(null);
+    //    $("#txtAracMarkaSil").val(null);
+    //    $("#txtAracModelSil").val(null);
+    //    $("#txtAracMYiliSil").val(null);
+    //    $("#txtAracBelgeSeriNSil").val(null);
+    //    $("#txtAracMuayeneSil").val(null);
+    //    $("#txtAracSasiSil").val(null);
+    //    $("#txtAracGorBasSil").val(null);
+    //    $("#txtAracNotSil").val(null);
+    //    $("#txtAracIlkKayitSil").val(null);
+    //    $("#txtAracGirisKMSil").val(null);
+    //}
+
+    $('#txtPersonelBaslamaTarihiAdded').datepicker({
+        format: "dd/mm/yyyy",
+        weekStart: 1,
+        todayBtn: true,
+        clearBtn: true,
+        language: "tr",
+        daysOfWeekHighlighted: "0,6",
+        autoclose: true,
+        todayHighlight: true
+    });
+
+    //$('#txtAracGorBasDuz').datepicker({
+    //    format: "dd/mm/yyyy",
+    //    weekStart: 1,
+    //    todayBtn: true,
+    //    clearBtn: true,
+    //    language: "tr",
+    //    daysOfWeekHighlighted: "0,6",
+    //    autoclose: true,
+    //    todayHighlight: true
+    //});
+
+    //$('#txtAracGorBitSil').datepicker({
+    //    format: "dd/mm/yyyy",
+    //    weekStart: 1,
+    //    todayBtn: true,
+    //    clearBtn: true,
+    //    language: "tr",
+    //    daysOfWeekHighlighted: "0,6",
+    //    autoclose: true,
+    //    todayHighlight: true
+    //});
+
+    //$('#txtAracGorBasEkle').datepicker({
+    //    format: "dd/mm/yyyy",
+    //    weekStart: 1,
+    //    todayBtn: true,
+    //    clearBtn: true,
+    //    language: "tr",
+    //    daysOfWeekHighlighted: "0,6",
+    //    autoclose: true,
+    //    todayHighlight: true
+    //});
+
+    //$('#txtAracMYiliEkle').datepicker({
+    //    minViewMode: 2,
+    //    language: "tr"
+    //});
+
+    //$('#txtAracMYiliDuzenle').datepicker({
+    //    minViewMode: 2,
+    //    language: "tr"
+    //});
+
+</script>
 

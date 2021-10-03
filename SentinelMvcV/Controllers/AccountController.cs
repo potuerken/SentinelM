@@ -37,6 +37,7 @@ namespace SentinelMvcV.Controllers
         {
             if (token.Expiration > DateTime.Now)
             {
+                _httpContext.HttpContext.Session.SetString("userId", token.UserId.ToString());
                 _httpContext.HttpContext.Session.SetString("jwt", token.Token);
                 _httpContext.HttpContext.Session.SetString("jwtexpire", token.Expiration.ToString());
                 return true;

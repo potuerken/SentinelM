@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SentinelMvc", "SentinelMvc", "{4FEDBB53-5D3E-48B4-BE61-533CE9376BA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SentinelMvcV", "SentinelMvcV\SentinelMvcV.csproj", "{4894E2FD-56F1-4ED4-80B6-17045596BCC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SentinelMvcV", "SentinelMvcV\SentinelMvcV.csproj", "{4894E2FD-56F1-4ED4-80B6-17045596BCC5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CheckLayer", "CheckLayer", "{A6F0BE3F-8C35-4502-AE0D-7CCF8FCB927E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Check", "..\SentinelV\Check\Check.csproj", "{9E1DF073-6836-41EA-8C5F-91B839653BAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +21,17 @@ Global
 		{4894E2FD-56F1-4ED4-80B6-17045596BCC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4894E2FD-56F1-4ED4-80B6-17045596BCC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4894E2FD-56F1-4ED4-80B6-17045596BCC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E1DF073-6836-41EA-8C5F-91B839653BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E1DF073-6836-41EA-8C5F-91B839653BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E1DF073-6836-41EA-8C5F-91B839653BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E1DF073-6836-41EA-8C5F-91B839653BAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4894E2FD-56F1-4ED4-80B6-17045596BCC5} = {4FEDBB53-5D3E-48B4-BE61-533CE9376BA6}
+		{9E1DF073-6836-41EA-8C5F-91B839653BAB} = {A6F0BE3F-8C35-4502-AE0D-7CCF8FCB927E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6EB39383-F5D8-408E-9C31-734A3CBC9F0E}
