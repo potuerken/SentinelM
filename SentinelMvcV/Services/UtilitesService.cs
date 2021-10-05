@@ -1,5 +1,4 @@
 ﻿using Check.DTO;
-using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using SentinelMvcV.Helpers;
 using System;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SentinelMvcV.Services
 {
-    public static class PersonelService
+    public class UtilitesService
     {
 
         private static string jsonData = "";
@@ -21,13 +20,14 @@ namespace SentinelMvcV.Services
             }
         }
 
-        public static List<PersonelDTO> GetAll()
+
+        public static List<KodDTO> KodGetAll(short kodTipId)
         {
-            jsonData = WebApiServices.GetAll("personel", "getpersonel").Result;
+            jsonData = WebApiServices.GetSingle("utilites", "getallkod", "?kodTipId=", kodTipId).Result;
             if (jsonData != null)
             {
-                var personelList = JsonConvert.DeserializeObject<List<PersonelDTO>>(jsonData);
-                return personelList;
+                var kodList = JsonConvert.DeserializeObject<List<KodDTO>>(jsonData);
+                return kodList;
             }
             return null;
         }

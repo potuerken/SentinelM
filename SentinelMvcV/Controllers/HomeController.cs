@@ -28,6 +28,12 @@ namespace SentinelMvcV.Controllers
             return View();
         }
 
+        public IActionResult Sube()
+        {
+
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

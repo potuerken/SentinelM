@@ -161,11 +161,11 @@
                             </div>
                             <div class="mb-3"></div>
                             <div class="col-md-12">
-                                @Html.DropDownListFor(a => a.CrudPersonelDTO.CinsiyetKod.Id, cinsiyetList, "cinsiyeti seçiniz", new { @class = "form-control", id = "txtPersonelCinsiyetIdAdded", @required = "required", @placeholder = "personel cinsiyet bilgisi", data_live_search = "true" })
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.CepNo, new { @class = "form-control", @id = "txtPersonelCepNoAdded", @placeholder = "personel cep no", @required = "required", @minlength = "3", @autocomplete = "off" })
                             </div>
                             <div class="mb-3"></div>
                             <div class="col-md-12">
-                                @Html.DropDownListFor(a => a.CrudPersonelDTO.RutbeKod.Id, rutbeList, "personelin rütbesini seçiniz", new { @class = "form-control", @id = "txtPersonelRutbeIdAdded", @required = "required", @placeholder = "personel rütbe bilgisi", data_live_search = "true" })
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Dahili, new { @class = "form-control", @id = "txtPersonelDahiliAdded", @placeholder = "personel dahili telefon", @required = "required", @minlength = "5", @maxlenght = "5", @autocomplete = "off" })
                             </div>
                             <div class="mb-3"></div>
                         </div>
@@ -180,20 +180,27 @@
                             </div>
                             <div class="mb-3"></div>
                             <div class="col-md-12">
-                                @Html.CheckBoxFor(a => a.CrudPersonelDTO.NobetTutabilirMi, new { @class = "checkbox", @id = "txtPersonelNobetTutabilirMiAdded" })
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.CinsiyetKod.Id, cinsiyetList, "cinsiyeti seçiniz", new { @class = "form-control", id = "txtPersonelCinsiyetIdAdded", @required = "required", @placeholder = "personel cinsiyet bilgisi", data_live_search = "true" })
                             </div>
                             <div class="mb-3"></div>
                             <div class="col-md-12">
-                                @Html.CheckBoxFor(a => a.CrudPersonelDTO.CocukDurumu, new { @class = "checkbox", @id = "txtPersonelCocukDurumuAdded" })
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.RutbeKod.Id, rutbeList, "personelin rütbesini seçiniz", new { @class = "form-control", @id = "txtPersonelRutbeIdAdded", @required = "required", @placeholder = "personel rütbe bilgisi", data_live_search = "true" })
                             </div>
                             <div class="mb-3"></div>
                             <div class="col-md-12">
-                                @Html.TextBoxFor(a => a.CrudPersonelDTO.CepNo, new { @class = "form-control", @id = "txtPersonelCepNoAdded", @placeholder = "personel cep no", @required = "required", @minlength = "3", @autocomplete = "off" })
+
+                                <div class="col-md-3">@Html.DisplayNameFor(a => a.CrudPersonelDTO.NobetTutabilirMi)</div>
+                                <div class="col-md-9">
+                                    @Html.CheckBoxFor(a => a.CrudPersonelDTO.NobetTutabilirMi, new { @class = "checkbox", @id = "txtPersonelNobetTutabilirMiAdded" })
+                                </div>
                             </div>
+
                             <div class="mb-3"></div>
-                            <div class="mb-3">@Html.DisplayNameFor(a=>a.CrudPersonelDTO.Dahili)</div>
                             <div class="col-md-12">
-                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Dahili, new { @class = "form-control", @id = "txtPersonelDahiliAdded", @placeholder = "personel dahili telefon", @required = "required", @minlength = "5", @maxlenght = "5", @autocomplete = "off" })
+                                <div class="col-md-3">@Html.DisplayNameFor(a => a.CrudPersonelDTO.CocukDurumu)</div>
+                                <div class="col-md-9">
+                                    @Html.CheckBoxFor(a => a.CrudPersonelDTO.CocukDurumu, new { @class = "checkbox", @id = "txtPersonelCocukDurumuAdded" })
+                                </div>
                             </div>
                             <div class="mb-3"></div>
                         </div>
@@ -223,7 +230,8 @@
     var saniye = tarih.getSeconds();
 
 
-    $(document).ready(function () {
+    $(document).ready(function ()
+{
         $.fn.selectpicker.Constructor.BootstrapVersion = '4';
         $(function () {
             $('#txtPersonelCinsiyetIdAdded').selectpicker(

@@ -1,0 +1,303 @@
+﻿@using Check.DTO;
+@using SentinelMvcV.ViewModel;
+@model KodSubeViewModel
+@{
+    ViewData["Title"] = "Şube Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    List<KodDTO> subeList = (List<KodDTO>)TempData["SubeDD"];
+
+    var AddedSuccessMessage = (string)TempData["AddedSuccessMessage"];
+    var AddedFailedMessage = (string)TempData["AddedFailedMessage"];
+}
+
+
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <button style="margin-top:10px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddedSubeModal" onClick="AddedMessage()">
+                    Yeni Şube Ekle
+                </button>
+            </div>
+            <div class="col-md-10"></div>
+        </div>
+        @if (AddedSuccessMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-success" role="alert">
+                <span>@AddedSuccessMessage</span>
+            </div>
+        }
+        @if (AddedFailedMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-danger" role="alert">
+                <span>@AddedFailedMessage</span>
+            </div>
+        }
+        <div class="mb-2"></div>
+
+        <table id="SubeListDT" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th style="text-align:center">Şube Adı</th>
+                    <th style="text-align:center">Detay</th>
+                    <th style="text-align:center">Düzenle</th>
+                    <th style="text-align:center">Sil</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (KodDTO item in subeList)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@item.Ad</td>
+                        <td style="text-align:center">@Html.ActionLink("Detay", "YakitListesi", "VAKA", new { id = @item.Id }, new { @class = "btn btn-success btn-block" })</td>
+                        <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdateSubeModal" onClick="UpdatedMessage('@item.Id','@item.Ad')">Düzenle</button></td>
+                        <td style="text-align:center"><button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#DeletedSubeModal" onClick="DeletedMessage('@item.Id','@item.Ad')">Sil</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@*Ekle Modalı*@
+@using (Html.BeginForm("YakitCrud", "FTK", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.CrudSubeKodDTO.Id);
+    <div class="modal fade" id="AddedSubeModal" tabindex="-1" role="dialog" aria-labelledby="AddedSubeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddedSubeModalLabel">Yakıt Türü Ekle İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="AddedReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @Html.TextBoxFor(a => a.CrudSubeKodDTO.Ad, new { @class = "form-control", @id = "txtSubeAdAdded", @placeholder = "eklenecek şube adı", @autocomplete = "off", @autofocus = "autofocus" })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AddedReflesh()">Kapat</button>
+                    <button id="btnSubeAdded" type="submit" class="btn btn-success">Şube Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*Düzenle Modalı*@
+@using (Html.BeginForm("YakitCrud", "FTK", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.CrudSubeKodDTO.Id, new { id = "hdnUpdatedSubeId" });
+    <div class="modal fade" id="UpdateSubeModal" tabindex="-1" role="dialog" aria-labelledby="UpdateSubeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="UpdateSubeModalLabel">Yakıt Türü Düzenleme İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="UpdatedReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    @Html.TextBoxFor(a => a.CrudSubeKodDTO.Ad, new { @class = "form-control", @id = "txtSubeAdUpdated", @placeholder = "şubenin yeni adı", @autocomplete = "off" })
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="UpdatedReflesh()">Kapat</button>
+                    <button id="btnSubeUpdated" type="submit" class="btn btn-success">Değiştir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@*Sil Modalı*@
+@using (Html.BeginForm("YakitSil", "FTK", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.CrudSubeKodDTO.Id, new { id = "hdnDeletedSubeId" });
+    <div class="modal fade" id="DeletedSubeModal" tabindex="-1" role="dialog" aria-labelledby="DeletedSubeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="DeletedSubeModalLabel">Şube Kapatma İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="DeletedReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">@Html.TextBoxFor(a => a.CrudSubeKodDTO.Ad, new { @class = "form-control", @id = "txtSubeAdiDeleted", @readonly = "readonly" })</div>
+                    <div class="mb-3"></div>
+                    <div class="col-md-12"><span>Silmek istediğine emin misin ?</span></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="DeletedReflesh()">Vazgeçtim...</button>
+                    <button type="submit" class="btn btn-danger">Sil Sil Sil!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    var tarih = new Date();
+    var yil = tarih.getFullYear();
+    var ay = tarih.getMonth();
+    var gun = tarih.getDate();
+    var saat = tarih.getHours();
+    var dakika = tarih.getMinutes();
+    var saniye = tarih.getSeconds();
+
+    $(document).ready(function () {
+        $('#AddedSubeModal').on('shown.bs.modal', function () {
+            $('#txtSubeAdAdded').trigger('focus');
+        });
+
+        var table = $('#SubeListDT').DataTable({
+            dom: 'Bfrtip',
+            // Page kaçlı listeler halinde gelmesi için
+            lengthChange: false,
+            // Page li kısmın buton şeklinde görünmesi için
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 Kayıt', '25 Kayıt', '50 Kayıt', 'Tümü']
+            ],
+            // Çıktı Butonları
+            buttons: [
+                { extend: 'copy', text: 'Kopyala' },
+                {
+                    // Çıktının tipi
+                    extend: 'excel',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Yakıt Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    text: 'Excel'
+                },
+                // Kaçlı listeler halinde görünsün
+                { extend: 'pageLength', text: 'Görüntülenme' },
+                // PDF olarak çıktı al
+                {
+                    // Çıktının tipi
+                    extend: 'pdf',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Yakıt Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye
+                },
+                // Sütunlardan hangisi görünsün
+                { extend: 'colvis', text: 'Sütun Gizle/Göster' }],
+            language: {
+
+                "emptyTable": "Mevcut veri yok.",
+                "info": "Toplam _TOTAL_ kayıttan _START_ ile _END_ arasındaki kayıtlar.",
+                "infoEmpty": "Arama sonucu veri bulunamadı.",
+                "infoFiltered": "(toplam _MAX_ kayıt içinde arandı.)",
+                "loadingRecords": "Yükleniyor...",
+                "search": "Ara:",
+                "zeroRecords": "Hiçbir eşleşen kayıt bulunamadı",
+                "paginate": {
+                    "first": "İlk",
+                    "last": "Son",
+                    "next": "Sonraki",
+                    "previous": "Önceki"
+                }
+            },
+            // Alttaki sayfa numaralarının hepsi görünsün
+            "pagingType": "full_numbers",
+            // Sütunların sıralamasını kullanıcının değiştirilebilir olması yapar.
+            colReorder: true,
+            // columnDef özelliğini açar olarak anladım.
+            rowReorder: true,
+            // Targets olarak seçtiğin indeks sıralamasına göre sütunların order özelliği açılır kapanır.
+            columnDefs: [
+                { width: '4%', targets: 0 },
+                { searchable: true, orderable: true, className: 'reorder', targets: 1 },
+                { searchable: false, orderable: false, targets: '_all' }
+            ],
+            order: [[1, "asc"]],
+            stateSave: true
+        });
+
+        table.on('order.dt search.dt', function () {
+            table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+                table.cell(cell).invalidate('dom');
+            });
+        }).draw();
+
+        // Butonların bootstrap tipi görünürlüğü sağlar
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+
+        // Menüdeki üst başlığın kalın olması için
+        $("#listUtilitesAnaBaslik").attr('class', 'nav-item active');
+        // Menünün tüm alt başlıklarını açık tutmak için
+        $("#utilitesMenusu").attr('class', 'collapse show');
+        // Seçilen alt başlığın baskın olması için
+        $("#subeButonu").attr('class', 'collapse-item active');
+        // Seçildiğinde okun aşağı doğru bakması için
+        $("#utilitesOkYonu").toggleClass('collapsed');
+
+        $("#btnSubeUpdated").prop("disabled", true);
+        $("#btnSubeAdded").prop("disabled", true);
+    });
+
+
+
+    function AddedMessage() {
+        $("#btnSubeAdded").prop("disabled", true);
+        $(function () {
+            $('#txtSubeAdAdded').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#btnSubeAdded").prop("disabled", false);
+                } else {
+                    $("#btnSubeAdded").prop("disabled", true);
+                }
+            });
+        });
+    }
+
+    function AddedReflesh() {
+        $("#txtSubeAdAdded").val(null);
+    }
+
+    function UpdatedReflesh() {
+        $("#hdnUpdatedSubeId").val(0);
+        $("#txtSubeAdUpdated").val(null);
+    }
+
+    function DeletedReflesh() {
+        $("#hdnDeletedSubeId").val(0);
+        $("#txtSubeAdiDeleted").val(null);
+    }
+
+    function UpdatedMessage(id, name) {
+        $("#hdnUpdatedSubeId").val(id);
+        $("#txtSubeAdUpdated").val(name);
+        $("#btnSubeUpdated").prop("disabled", true);
+        $(function () {
+            $('#txtSubeAdUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#btnSubeUpdated").prop("disabled", false);
+                } else {
+                    $("#btnSubeUpdated").prop("disabled", true);
+                }
+            });
+        });
+    }
+
+    function DeletedMessage(id, name) {
+        $("#hdnDeletedSubeId").val(id);
+        $("#txtSubeAdiDeleted").val(name);
+    }
+</script>
+

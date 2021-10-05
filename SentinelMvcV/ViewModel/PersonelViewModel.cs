@@ -13,9 +13,9 @@ namespace SentinelMvcV.ViewModel
         public PersonelViewModel()
         {
             PersonelListesi = PersonelService.GetAll();
-            CinsiyetDD = PersonelService.KodGetAll((short)KodTipEnum.Cinsiyet);
-            RutbetDD = PersonelService.KodGetAll((short)KodTipEnum.Rutbe);
-            SubeDD = PersonelService.KodGetAll((short)KodTipEnum.Sube);
+            CinsiyetDD = UtilitesService.KodGetAll((short)KodTipEnum.Cinsiyet);
+            RutbetDD = UtilitesService.KodGetAll((short)KodTipEnum.Rutbe);
+            SubeDD = UtilitesService.KodGetAll((short)KodTipEnum.Sube);
         }
         public List<PersonelDTO> PersonelListesi { get; set; }
         public List<KodDTO> CinsiyetDD { get; set; }

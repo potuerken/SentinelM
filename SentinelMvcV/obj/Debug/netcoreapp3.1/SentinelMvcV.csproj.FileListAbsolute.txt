@@ -156,3 +156,4 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Ch
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Core.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Check.pdb
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Core.pdb
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Utilites\SubeListesi.cshtml.g.cs
