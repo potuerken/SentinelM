@@ -76,6 +76,11 @@ namespace SentinelMvcV.Helpers
 
             using (var response = await client.PostAsync(serviceUrl, httpContent))
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", null);
+                    return null;
+                }
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }

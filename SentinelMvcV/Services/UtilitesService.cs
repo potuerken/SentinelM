@@ -1,4 +1,5 @@
 ﻿using Check.DTO;
+using Check.Enum;
 using Newtonsoft.Json;
 using SentinelMvcV.Helpers;
 using System;
@@ -31,5 +32,17 @@ namespace SentinelMvcV.Services
             }
             return null;
         }
+
+        public static ServiceResult KodAdded(KodDTO dto)
+        {
+            jsonData = WebApiServices.Post("utilites", "kodadded", dto).Result;
+            if (jsonData != null)
+            {
+                var kodAdded = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return kodAdded;
+            }
+            return null;
+        }
+
     }
 }
