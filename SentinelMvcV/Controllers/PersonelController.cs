@@ -64,8 +64,8 @@ namespace SentinelMvcV.Controllers
                         TempData.Add("SuccessMessage", result.Message);
                     else
                         TempData.Add("FailedMessage", result.Message);
+                    return RedirectToAction("PersonelListesi");
                 }
-                
             }
             return RedirectToAction("Index", "Home");
         }

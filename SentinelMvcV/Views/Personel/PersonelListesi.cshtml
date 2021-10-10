@@ -88,7 +88,7 @@
                     <th style="text-align:center">Birimde Başlama Tarihi</th>
                     <th style="text-align:center">Detay</th>
                     <th style="text-align:center">Düzenle</th>
-                    <th style="text-align:center">İlişiği Kes</th>
+                        @*<th style="text-align:center">İlişiği Kes</th>*@
                 </tr>
             </thead>
             <tbody>
@@ -110,16 +110,10 @@
                         <td>@item.Dahili</td>
                         <td>@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))</td>
                         <td style="text-align:center">@Html.ActionLink("Detay", "PersonelDetail", "Personel", null, new { @class = "btn btn-success btn-block" })</td>
+                        <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedPersonelModal" onClick="UpdatedMessage('@item.Id','@item.Sicil','@item.Tckn','@item.Ad','@item.Soyad','@item.CinsiyetKod.Id','@item.RutbeKod.Id','@item.NobetTutabilirMi','@item.CocukDurumu','@item.CepNo', '@item.Dahili', '@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SubeKod.Id', '@item.YakinCepNo')">Düzenle</button></td>
 
 
-
-                        @*<td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#exampleModal" onClick="duzenleIleti('@item.AracID','@item.tescilTuruDto.TescilTuruID' , '@item.aracCinsDto.AracCinsID', '@item.yakitTuruDto.YakitTuruID', '@item.Plaka', '@item.Marka', '@item.Model', '@item.ModelYili', '@item.BelgeSeriNo', '@item.MuayeneGecerlilikTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SasiNumarasi', '@item.AracGoreveBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.AracNotu', '@item.IlkKayitTarihi', '@item.GirisKM')">Düzenle</button></td>
-
-
-
-
-
-                            <td style="text-align:center"><button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#silModal" onClick="silIleti('@item.AracID','@item.tescilTuruDto.TescilTuruID' , '@item.aracCinsDto.AracCinsID', '@item.yakitTuruDto.YakitTuruID', '@item.Plaka', '@item.Marka', '@item.Model', '@item.ModelYili', '@item.BelgeSeriNo', '@item.MuayeneGecerlilikTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SasiNumarasi', '@item.AracGoreveBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.AracNotu', '@item.IlkKayitTarihi', '@item.GirisKM')">Sil</button></td>*@
+                        @*<td style="text-align:center"><button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#silModal" onClick="silIleti('@item.AracID','@item.tescilTuruDto.TescilTuruID' , '@item.aracCinsDto.AracCinsID', '@item.yakitTuruDto.YakitTuruID', '@item.Plaka', '@item.Marka', '@item.Model', '@item.ModelYili', '@item.BelgeSeriNo', '@item.MuayeneGecerlilikTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SasiNumarasi', '@item.AracGoreveBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.AracNotu', '@item.IlkKayitTarihi', '@item.GirisKM')">Sil</button></td>*@
                     </tr>
                 }
             </tbody>
@@ -128,7 +122,7 @@
     </div>
 </div>
 
-@*Ekle Modalı*@
+@*Ekle Modal*@
 @using (Html.BeginForm("PersonelCrud", "Personel", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
@@ -238,15 +232,119 @@
         </div>
     </div>
 }
+
+@*Duzenle Modal*@
+@using (Html.BeginForm("PersonelCrud", "Personel", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(model=>model.CrudPersonelDTO.Id, new { id= "txtPersonelIdUpdated" })
+    <div class="modal fade bd-example-modal-lg" id="UpdatedPersonelModal" tabindex="-1" role="dialog" aria-labelledby="UpdatedPersonelModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="UpdatedPersonelModalLabel">Yeni Personel Ekleme İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="UpdatedPersonelModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.Sicil)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Sicil, new { @class = "form-control", @id = "txtPersonelSicilUpdated", @placeholder = "personel sicil bilgisi", @required = "required", @minlength = "6", @maxlenght = "6", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.Tckn)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Tckn, new { @class = "form-control", @id = "txtPersonelTcknUpdated", @placeholder = "personel tc bilgisi", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.Ad)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Ad, new { @class = "form-control", @id = "txtPersonelAdUpdated", @placeholder = "personel ad bilgisi", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.Soyad)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Soyad, new { @class = "form-control", @id = "txtPersonelSoyadUpdated", @placeholder = "personel soyad biglsii", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.CepNo)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.CepNo, new { @class = "form-control", @id = "txtPersonelCepNoUpdated", @placeholder = "personel cep no", @required = "required", @minlength = "3", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.YakinCepNo)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.YakinCepNo, new { @class = "form-control", @id = "txtPersonelYakinCepNoUpdated", @placeholder = "personel yakınına ait telefon", @required = "required", @minlength = "5", @maxlenght = "5", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.Dahili)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.Dahili, new { @class = "form-control", @id = "txtPersonelDahiliUpdated", @placeholder = "personel dahili telefon", @required = "required", @minlength = "5", @maxlenght = "5", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.BirimBaslamaTarihi)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudPersonelDTO.BirimBaslamaTarihi, new { @class = "form-control", @id = "txtPersonelBaslamaTarihiUpdated", @placeholder = "personel birimde başlama tarihi", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.SubeKod)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.SubeKod.Id, subeList, "personel şubesini seçiniz", new { @class = "form-control", @id = "txtPersonelSubeIdUpdated", @required = "required", @placeholder = "personel şube bilgisi", data_live_search = "true" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.CinsiyetKod)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.CinsiyetKod.Id, cinsiyetList, "cinsiyeti seçiniz", new { @class = "form-control", id = "txtPersonelCinsiyetIdUpdated", @required = "required", @placeholder = "personel cinsiyet bilgisi", data_live_search = "true" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="row" id="">
+                                <div class="col-md-6 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.CocukDurumu)</div>
+                                <div class="col-md-6">
+                                    @Html.CheckBoxFor(a => a.CrudPersonelDTO.CocukDurumu, new { @class = "checkbox", @id = "txtPersonelCocukDurumuUpdated" })
+                                </div>
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="col-md-12 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.RutbeKod)</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudPersonelDTO.RutbeKod.Id, rutbeList, "personelin rütbesini seçiniz", new { @class = "form-control", @id = "txtPersonelRutbeIdUpdated", @required = "required", @placeholder = "personel rütbe bilgisi", data_live_search = "true" })
+                            </div>
+                            <div class="mb-3"></div>
+                            <div class="row">
+                                <div class="col-md-6 font-weight-bold">@Html.DisplayNameFor(a => a.CrudPersonelDTO.NobetTutabilirMi)</div>
+                                <div class="col-md-6">
+                                    @Html.CheckBoxFor(a => a.CrudPersonelDTO.NobetTutabilirMi, new { @class = "checkbox", @id = "txtPersonelNobetTutabilirMiUpdated" })
+                                </div>
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="UpdatedPersonelModalReflesh()">Kapat</button>
+                    <button id="UpdatedPersonelModalButton" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 <script>
-
-    $('#txtPersonelSicilAdded').mask('999999');
-    $('#txtPersonelTcknAdded').mask('99999999999');
-    $('#txtPersonelDahiliAdded').mask('99999');
-    $('#txtPersonelCepNoAdded').mask('000-000-00-00');
-    $('#txtPersonelYakinCepNoAdded').mask('000-000-00-00');
-
-
     var tarih = new Date();
     var yil = tarih.getFullYear();
     var ay = tarih.getMonth();
@@ -257,103 +355,50 @@
 
 
     $(document).ready(function () {
+
+        $('#txtPersonelSicilAdded').mask('999999');
+        $('#txtPersonelTcknAdded').mask('99999999999');
+        $('#txtPersonelDahiliAdded').mask('99999');
+        $('#txtPersonelCepNoAdded').mask('000-000-00-00');
+        $('#txtPersonelYakinCepNoAdded').mask('000-000-00-00');
+        $('#txtPersonelSicilUpdated').mask('999999');
+        $('#txtPersonelTcknUpdated').mask('99999999999');
+        $('#txtPersonelDahiliUpdated').mask('99999');
+        $('#txtPersonelCepNoUpdated').mask('000-000-00-00');
+        $('#txtPersonelYakinCepNoUpdated').mask('000-000-00-00');
+
+
         $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
         $(function () {
             $('#txtPersonelCinsiyetIdAdded').selectpicker(
-
             );
         });
 
         $(function () {
             $('#txtPersonelRutbeIdAdded').selectpicker(
-
             );
         });
 
         $(function () {
             $('#txtPersonelSubeIdAdded').selectpicker(
-
+            );
+        });
+        $(function () {
+            $('#txtPersonelCinsiyetIdUpdated').selectpicker(
             );
         });
 
-        //$(function () {
-        //    $('#txtAracTescilIdDuzenle').selectpicker(
+        $(function () {
+            $('#txtPersonelRutbeIdUpdated').selectpicker(
+            );
+        });
 
-        //    );
-        //});
-        //$(function () {
-        //    $('#txtAracCinsIdDuzenle').selectpicker(
+        $(function () {
+            $('#txtPersonelSubeIdUpdated').selectpicker(
+            );
+        });
 
-        //    );
-        //});
-        //$(function () {
-        //    $('#txtAracYakitIdDuzenle').selectpicker(
-
-        //    );
-        //});
-        //$(function () {
-        //    $('#txtAracTescilIdSil').selectpicker(
-
-        //    );
-        //});
-        //$(function () {
-        //    $('#txtAracCinsIdSil').selectpicker(
-
-        //    );
-        //});
-        //$(function () {
-        //    $('#txtAracYakitIdSil').selectpicker(
-
-        //    );
-        //});
-
-        //$("#txtPersonelCinsiyetIdAdded").change(function () {
-        //    var id = $(this).val();
-        //    var cinsDD = $("#txtPersonelRutbeIdAdded");
-        //    cinsDD.empty();
-        //    $('#txtPersonelRutbeIdAdded').prop('disabled', true);
-        //    $('#txtPersonelRutbeIdAdded').selectpicker('refresh');
-        //    $.ajax({
-        //        url: '/SAK/CinsDoldur',
-        //        type: 'POST',
-        //        dataType: 'json',
-        //        data: { 'tescilID': id },
-        //        success: function (data) {
-        //            if (data.length > 0) {
-        //                cinsDD.append("<option value='0'>araç cinsini seçiniz</option>");
-        //                $.each(data, function (index, option) {
-        //                    cinsDD.append('<option value=' + option.Value + '>' + option.Text + '</option>');
-        //                });
-        //                $('#txtPersonelRutbeIdAdded').prop('disabled', false);
-        //                $('#txtPersonelRutbeIdAdded').selectpicker('refresh');
-        //            }
-        //        }
-        //    });
-        //});
-
-        //$("#txtAracTescilIdDuzenle").change(function () {
-        //    var id = $(this).val();
-        //    var cinsDD = $("#txtAracCinsIdDuzenle");
-        //    cinsDD.empty();
-        //    $('#txtAracCinsIdDuzenle').prop('disabled', true);
-        //    $('#txtAracCinsIdDuzenle').selectpicker('refresh');
-        //    $.ajax({
-        //        url: '/SAK/CinsDoldur',
-        //        type: 'POST',
-        //        dataType: 'json',
-        //        data: { 'tescilID': id },
-        //        success: function (data) {
-        //            if (data.length > 0) {
-        //                cinsDD.append("<option value='0'>araç cinsini seçiniz</option>");
-        //                $.each(data, function (index, option) {
-        //                    cinsDD.append('<option value=' + option.Value + '>' + option.Text + '</option>');
-        //                });
-        //                $('#txtAracCinsIdDuzenle').prop('disabled', false);
-        //                $('#txtAracCinsIdDuzenle').selectpicker('refresh');
-        //            }
-        //        }
-        //    });
-        //});
 
         var table = $('#DTPersonelListesi').DataTable({
             dom: 'Bfrtip',
@@ -434,6 +479,7 @@
             });
         }).draw();
 
+
         // Butonların bootstrap tipi görünürlüğü sağlar
         table.buttons().container()
             .appendTo('#example_wrapper .col-md-6:eq(0)');
@@ -466,64 +512,105 @@
         $("#txtPersonelCocukDurumuAdded").prop("checked", false);
     }
 
-    //function duzenleIleti(aracId, tescilId, cinsId, yakitId, plaka, marka, model, mYili, belgeseri, muayene, sasi, gorevebas, aracnot, ilkKayit, girisKM) {
-    //    $("#txtAracIdDuzenle").val(aracId);
-    //    $("#txtAracTescilIdDuzenle").selectpicker('val', tescilId);
-    //    $("#txtAracCinsIdDuzenle").selectpicker('val', cinsId);
-    //    $("#txtAracYakitIdDuzenle").selectpicker('val', yakitId);
-    //    $("#txtAracPlakaDuzenle").val(plaka);
-    //    $("#txtAracMarkaDuzenle").val(marka);
-    //    $("#txtAracModelDuzenle").val(model);
-    //    $("#txtAracMYiliDuzenle").val(mYili);
-    //    $("#txtAracBelgeSeriNDuzenle").val(belgeseri);
-    //    $("#txtAracMuayeneDuzenle").val(muayene);
-    //    $("#txtAracSasiDuzenle").val(sasi);
-    //    $("#txtAracGorBasDuz").val(gorevebas);
-    //    $("#txtAracNotDuzenle").val(aracnot);
-    //    $("#txtAracIlkKayitDuzenle").val(ilkKayit);
-    //    $("#txtAracGirisKMDuz").val(girisKM);
+    function UpdatedPersonelModalReflesh() {
+        $("#txtPersonelCinsiyetIdUpdated").selectpicker('val', null);
+        $("#txtPersonelRutbeIdUpdated").selectpicker('val', null);
+        $("#txtPersonelSubeIdUpdated").selectpicker('val', null);
+        $("#txtPersonelSicilUpdated").val(null);
+        $("#txtPersonelTcknUpdated").val(null);
+        $("#txtPersonelAdUpdated").val(null);
+        $("#txtPersonelSoyadUpdated").val(null);
+        $("#txtPersonelBaslamaTarihiUpdated").val(null);
+        $("#txtPersonelCepNoUpdated").val(null);
+        $("#txtPersonelYakinCepNoUpdated").val(null);
+        $("#txtPersonelDahiliUpdated").val(null);
+        $("#txtPersonelNobetTutabilirMiUpdated").prop("checked", false);
+        $("#txtPersonelCocukDurumuUpdated").prop("checked", false);
+    }
 
-    //    var id = $("#txtAracTescilIdDuzenle").val();
-    //    var cinsDD = $("#txtAracCinsIdDuzenle");
-    //    cinsDD.empty();
-    //    $('#txtAracCinsIdDuzenle').prop('disabled', true);
-    //    $('#txtAracCinsIdDuzenle').selectpicker('refresh');
-    //    $.ajax({
-    //        url: '/SAK/CinsDoldur',
-    //        type: 'POST',
-    //        dataType: 'json',
-    //        data: { 'tescilID': id },
-    //        success: function (data) {
-    //            if (data.length > 0) {
-    //                cinsDD.append("<option value='0'>araç cinsini seçiniz</option>");
-    //                $.each(data, function (index, option) {
-    //                    cinsDD.append('<option value=' + option.Value + '>' + option.Text + '</option>');
-    //                });
-    //                cinsDD.val(cinsId);
-    //                $('#txtAracCinsIdDuzenle').prop('disabled', false);
-    //                $('#txtAracCinsIdDuzenle').selectpicker('refresh');
-    //            }
-    //        }
-    //    });
-    //}
+    function UpdatedMessage(id, sicil, tckn, ad, soyad, cinsiyetKodId, rutbeKodId, nobetTutabilirMi, cocukDurumu, cepNo, dahili, birimBaslamaTarihi, subeKodId, yakinCepNo) {
+        $("#txtPersonelIdUpdated").val(id);
+        $("#txtPersonelSicilUpdated").val(sicil);
+        $("#txtPersonelTcknUpdated").val(tckn);
+        $("#txtPersonelAdUpdated").val(ad);
+        $("#txtPersonelSoyadUpdated").val(soyad);
+        $("#txtPersonelCinsiyetIdUpdated").selectpicker('val', cinsiyetKodId);
+        $("#txtPersonelRutbeIdUpdated").selectpicker('val', rutbeKodId);
+        $("#txtPersonelNobetTutabilirMiUpdated").prop("checked", nobetTutabilirMi);
+        $("#txtPersonelCocukDurumuUpdated").prop("checked", cocukDurumu);
+        $("#txtPersonelCepNoUpdated").val(cepNo);
+        $("#txtPersonelDahiliUpdated").val(dahili);
+        $("#txtPersonelBaslamaTarihiUpdated").val(birimBaslamaTarihi);
+        $("#txtPersonelSubeIdUpdated").selectpicker('val', subeKodId);
+        $("#txtPersonelYakinCepNoUpdated").val(yakinCepNo);
+        $("#UpdatedPersonelModalButton").prop("disabled", true);
+        $(function () {
+            $('#txtPersonelSicilUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelTcknUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelAdUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelSoyadUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelCepNoUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelDahiliUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelBaslamaTarihiUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelYakinCepNoUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtPersonelRutbeIdUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedPersonelModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedPersonelModalButton").prop("disabled", true);
+                }
+            });
+        });
+    }
 
-    //function duzenleSifirla() {
-    //    $("#txtAracIdDuzenle").val(0);
-    //    $("#txtAracTescilIdDuzenle").val(0);
-    //    $("#txtAracCinsIdDuzenle").val(0);
-    //    $("#txtAracYakitIdDuzenle").val(0);
-    //    $("#txtAracPlakaDuzenle").val(null);
-    //    $("#txtAracMarkaDuzenle").val(null);
-    //    $("#txtAracModelDuzenle").val(null);
-    //    $("#txtAracMYiliDuzenle").val(null);
-    //    $("#txtAracBelgeSeriNDuzenle").val(null);
-    //    $("#txtAracMuayeneDuzenle").val(null);
-    //    $("#txtAracSasiDuzenle").val(null);
-    //    $("#txtAracGorBasDuz").val(null);
-    //    $("#txtAracNotDuzenle").val(null);
-    //    $("#txtAracIlkKayitDuzenle").val(null);
-    //    $("txtAracGirisKMDuz").val(null);
-    //}
 
     //function silIleti(aracId, tescilId, cinsId, yakitId, plaka, marka, model, mYili, belgeseri, muayene, sasi, gorevebas, aracnot, ilkKayit, girisKM) {
     //    $("#txtAracIdSil").val(aracId);

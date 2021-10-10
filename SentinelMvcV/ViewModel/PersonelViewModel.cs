@@ -27,6 +27,12 @@ namespace SentinelMvcV.ViewModel
 
         public ServiceResult PersonelAdded(PersonelDTO dto, int userId)
         {
+            bool tcAndSicilAny = PersonelListesi.Any(a => a.Sicil == dto.Sicil || a.Tckn == dto.Tckn);
+            if (tcAndSicilAny)
+            {
+                return new ServiceResult(false, "TCKN VEYA SİCİL İLE EŞLEYEN KAYIT MEVCUT");
+            }
+
             dto.Ad = dto.Ad.Trim();
             dto.Soyad = dto.Soyad.Trim();
             dto.Sicil = dto.Sicil.Trim();
