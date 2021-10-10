@@ -47,5 +47,28 @@ namespace SentinelMvcV.Controllers
             }            
             return RedirectToAction("Index", "Home");
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult PersonelCrud(PersonelViewModel dto)
+        {
+            if (jwtToken != null || user <= 0)
+            {
+                PersonelService.SetToken = jwtToken;
+                if (dto.CrudPersonelDTO.Id == 0)
+                {
+                    var result = dto.PersonelAdded(dto.CrudPersonelDTO, user);
+
+                    if (result.Success)
+                        TempData.Add("SuccessMessage", result.Message);
+                    else
+                        TempData.Add("FailedMessage", result.Message);
+                }
+                
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }

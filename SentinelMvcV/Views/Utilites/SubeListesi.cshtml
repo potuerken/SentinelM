@@ -12,7 +12,6 @@
     var FailedMessage = (string)TempData["FailedMessage"];
 }
 
-
 <div class="container-fluid">
     <div class="form-group">
         <div class="row">
@@ -21,7 +20,6 @@
                     Yeni Şube Ekle
                 </button>
             </div>
-            @*<div class="col-md-10"></div>*@
         </div>
         @if (SuccessMessage != null)
         {
@@ -55,7 +53,7 @@
                         <td>@item.Ad</td>
                         <td style="text-align:center">@Html.ActionLink("Detay", "YakitListesi", "VAKA", new { id = @item.Id }, new { @class = "btn btn-success btn-block" })</td>
                         <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdateSubeModal" onClick="UpdatedMessage('@item.Id','@item.Ad')">Düzenle</button></td>
-                        <td style="text-align:center"><button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#DeletedSubeModal" onClick="DeletedMessage('@item.Id','@item.Ad')">Sil</button></td>
+                        <td style="text-align:center"><button type="button" class="btn btn-danger btn-block" data-toggle="modal" data-target="#DeletedSubeModal" onClick="DeletedMessage('@item.Id','@item.Ad','@item.UstKodId')">Sil</button></td>
                     </tr>
                 }
             </tbody>
@@ -67,6 +65,7 @@
 @*Ekle Modalı*@
 @using (Html.BeginForm("SubeCrud", "Utilites", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.CrudSubeKodDTO.Id);
     <div class="modal fade" id="AddedSubeModal" tabindex="-1" role="dialog" aria-labelledby="AddedSubeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -91,6 +90,7 @@
 @*Düzenle Modalı*@
 @using (Html.BeginForm("SubeCrud", "Utilites", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.CrudSubeKodDTO.Id, new { id = "hdnUpdatedSubeId" });
     <div class="modal fade" id="UpdateSubeModal" tabindex="-1" role="dialog" aria-labelledby="UpdateSubeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -117,6 +117,7 @@
 @using (Html.BeginForm("SubeCrud", "Utilites", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.CrudSubeKodDTO.Id, new { id = "hdnDeletedSubeId" });
+    @Html.HiddenFor(model => model.CrudSubeKodDTO.UstKodId, new { id = "hdnDeletedSubeUstKodId"})
     <div class="modal fade" id="DeletedSubeModal" tabindex="-1" role="dialog" aria-labelledby="DeletedSubeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -294,9 +295,10 @@
         });
     }
 
-    function DeletedMessage(id, name) {
+    function DeletedMessage(id, name, ustkod) {
         $("#hdnDeletedSubeId").val(id);
         $("#txtSubeAdiDeleted").val(name);
+        $("#hdnDeletedSubeUstKodId").val(ustkod);
     }
 </script>
 

@@ -27,7 +27,7 @@ namespace SentinelMvcV.Services
             jsonData = WebApiServices.GetSingle("utilites", "getallkod", "?kodTipId=", kodTipId).Result;
             if (jsonData != null)
             {
-                var kodList = JsonConvert.DeserializeObject<List<KodDTO>>(jsonData);
+                var kodList = JsonConvert.DeserializeObject<List<KodDTO>>(jsonData).OrderBy(a=>a.SiraNo).ToList();
                 return kodList;
             }
             return null;
@@ -40,6 +40,29 @@ namespace SentinelMvcV.Services
             {
                 var kodAdded = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
                 return kodAdded;
+            }
+            return null;
+        }
+
+
+        public static ServiceResult KodUpdated(KodDTO dto)
+        {
+            jsonData = WebApiServices.Put("utilites", "kodupdated", dto).Result;
+            if (jsonData != null)
+            {
+                var kodUpdated = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return kodUpdated;
+            }
+            return null;
+        }
+
+        public static ServiceResult KodDeleted(KodDTO dto)
+        {
+            jsonData = WebApiServices.Put("utilites", "koddeleted", dto).Result;
+            if (jsonData != null)
+            {
+                var kodDeleted = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return kodDeleted;
             }
             return null;
         }

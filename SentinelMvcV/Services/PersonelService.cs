@@ -31,5 +31,39 @@ namespace SentinelMvcV.Services
             }
             return null;
         }
+
+        public static ServiceResult PersonelAdded(PersonelDTO dto)
+        {
+            jsonData = WebApiServices.Post("personel", "personeladded", dto).Result;
+            if (jsonData != null)
+            {
+                var personelAdded = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return personelAdded;
+            }
+            return null;
+        }
+
+        public static ServiceResult PersonelUpdated(PersonelDTO dto)
+        {
+            jsonData = WebApiServices.Post("personel", "personelupdated", dto).Result;
+            if (jsonData != null)
+            {
+                var personelUpdated = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return personelUpdated;
+            }
+            return null;
+        }
+
+
+        public static ServiceResult PersonelDeleted(PersonelDTO dto)
+        {
+            jsonData = WebApiServices.Post("personel", "personeldeleted", dto).Result;
+            if (jsonData != null)
+            {
+                var personelDeleted = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return personelDeleted;
+            }
+            return null;
+        }
     }
 }

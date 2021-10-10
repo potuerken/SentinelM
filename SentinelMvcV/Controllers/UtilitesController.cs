@@ -27,6 +27,7 @@ namespace SentinelMvcV.Controllers
             }
         }
 
+
         [HttpGet]
         public IActionResult SubeListesi()
         {
@@ -45,6 +46,7 @@ namespace SentinelMvcV.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult SubeCrud(KodSubeViewModel dto)
         {
             if (jwtToken != null ||  user <= 0)
@@ -57,18 +59,32 @@ namespace SentinelMvcV.Controllers
                 }
                 if (dto.CrudSubeKodDTO.Id == 0)
                 {
-                    dto.CrudSubeKodDTO.Ad = dto.CrudSubeKodDTO.Ad.Trim();
-                    dto.CrudSubeKodDTO.UstKodId = Check.Enum.KodTipEnum.Sube;
-                    dto.CrudSubeKodDTO.IKKId = user;
-                    var result = UtilitesService.KodAdded(dto.CrudSubeKodDTO);
+                    var result = dto.SubeAdded(dto.CrudSubeKodDTO, user);
                     if (result.Success)
-                    {
                         TempData.Add("SuccessMessage", result.Message);
-                    }
                     else
-                    {
                         TempData.Add("FailedMessage", "Hata meydana geldi");
+                }
+                else if (dto.CrudSubeKodDTO.Id > 0 && dto.CrudSubeKodDTO.UstKodId == 0)
+                {
+                    if (dto.CrudSubeKodDTO.Ad == dto.SubeDD.Where(a => a.Id == dto.CrudSubeKodDTO.Id).Select(b => b.Ad).FirstOrDefault())
+                    {
+                        TempData.Add("FailedMessage", "Değiştirmek istenen şube müdürlüğü adı ile yeni eklenen şube müdürlüğü adı aynıdır.");
+                        return RedirectToAction("SubeListesi");
                     }
+                    var result = dto.SubeUpdated(dto.CrudSubeKodDTO, user);
+                    if (result.Success)
+                        TempData.Add("SuccessMessage", result.Message);
+                    else
+                        TempData.Add("FailedMessage", "Hata meydana geldi");
+                }
+                else if (dto.CrudSubeKodDTO.UstKodId > 0 && dto.CrudSubeKodDTO.Id > 0)
+                {
+                    var result = dto.SubeDeleted(dto.CrudSubeKodDTO, user);
+                    if (result.Success)
+                        TempData.Add("SuccessMessage", result.Message);
+                    else
+                        TempData.Add("FailedMessage", result.Message);
                 }
                 return RedirectToAction("SubeListesi");
             }

@@ -35,6 +35,11 @@ namespace SentinelMvcV.Helpers
 
             using (var response = await client.PostAsync(serviceUrl, httpcontent))
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", null);
+                    return null;
+                }
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }
@@ -62,6 +67,11 @@ namespace SentinelMvcV.Helpers
             serviceUrl = $"{url}{controller}/{action}/{parametreName}{id}";
             using (var response = await client.GetAsync(serviceUrl))
             {
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", null);
+                    return null;
+                }
                 return await response.Content.ReadAsStringAsync();
             }
         }
@@ -92,10 +102,15 @@ namespace SentinelMvcV.Helpers
             StringContent httpContent =
                 new StringContent(JsonConvert.SerializeObject(instance), Encoding.UTF8, "application/json");
 
-            using (var respon = await client.PutAsync(serviceUrl, httpContent))
+            using (var response = await client.PutAsync(serviceUrl, httpContent))
             {
-                respon.EnsureSuccessStatusCode();
-                return await respon.Content.ReadAsStringAsync();
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", null);
+                    return null;
+                }
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadAsStringAsync();
             }
         }
 

@@ -27,10 +27,13 @@ namespace SentinelMvcV.Controllers
         public IActionResult Login(UserLoginDto dto)
         {
             string jsonToken = WebApiServices.GetToken(dto).Result;
-            SentinelMvcV.Helpers.AccessToken token = JsonConvert.DeserializeObject<AccessToken>(jsonToken);
-            if (SetSessions(token))
-                return RedirectToAction("PersonelListesi", "Personel");
-            return RedirectToAction("Index");
+            if (jsonToken != null)
+            {
+                SentinelMvcV.Helpers.AccessToken token = JsonConvert.DeserializeObject<AccessToken>(jsonToken);
+                if (SetSessions(token))
+                    return RedirectToAction("PersonelListesi", "Personel");
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         private bool SetSessions(AccessToken token)
