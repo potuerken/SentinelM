@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace SentinelMvcV.Services
 {
-    public static class PersonelService
+    public static class PersonelService 
     {
 
         private static string jsonData = "";
         public static string SetToken
-        {
+        { 
             set
             {
                 WebApiServices.SetToken = value;
@@ -45,7 +45,7 @@ namespace SentinelMvcV.Services
 
         public static ServiceResult PersonelUpdated(PersonelDTO dto)
         {
-            jsonData = WebApiServices.Post("personel", "personelupdated", dto).Result;
+            jsonData = WebApiServices.Put("personel", "personelupdated", dto).Result;
             if (jsonData != null)
             {
                 var personelUpdated = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
@@ -55,15 +55,15 @@ namespace SentinelMvcV.Services
         }
 
 
-        public static ServiceResult PersonelDeleted(PersonelDTO dto)
-        {
-            jsonData = WebApiServices.Post("personel", "personeldeleted", dto).Result;
-            if (jsonData != null)
-            {
-                var personelDeleted = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
-                return personelDeleted;
-            }
-            return null;
-        }
+        //public static ServiceResult PersonelDeleted(PersonelDTO dto)
+        //{
+        //    jsonData = WebApiServices.Post("personel", "personeldeleted", dto).Result;
+        //    if (jsonData != null)
+        //    {
+        //        var personelDeleted = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+        //        return personelDeleted;
+        //    }
+        //    return null;
+        //}
     }
 }

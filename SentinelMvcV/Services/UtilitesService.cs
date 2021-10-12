@@ -46,7 +46,7 @@ namespace SentinelMvcV.Services
 
 
         public static ServiceResult KodUpdated(KodDTO dto)
-        {
+        { 
             jsonData = WebApiServices.Put("utilites", "kodupdated", dto).Result;
             if (jsonData != null)
             {

@@ -31,7 +31,7 @@ namespace SentinelMvcV.Controllers
         [HttpGet]
         public IActionResult SubeListesi()
         {
-            if (jwtToken != null || user <= 0)
+            if (jwtToken != null && user > 0)
             {
                 UtilitesService.SetToken = jwtToken;
                 KodSubeViewModel viewModel = new KodSubeViewModel();
@@ -49,7 +49,7 @@ namespace SentinelMvcV.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult SubeCrud(KodSubeViewModel dto)
         {
-            if (jwtToken != null ||  user <= 0)
+            if (jwtToken != null &&  user > 0)
             {
                 UtilitesService.SetToken = jwtToken;
                 if (string.IsNullOrWhiteSpace(dto.CrudSubeKodDTO.Ad))

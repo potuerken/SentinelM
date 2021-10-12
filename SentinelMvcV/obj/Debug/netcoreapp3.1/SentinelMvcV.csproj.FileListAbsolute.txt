@@ -151,6 +151,7 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Ra
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Sistem\NobetSistemListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Utilites\SubeListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
@@ -161,3 +162,9 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Se
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.pdb
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.genruntimeconfig.cache
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\EntityFramework.SqlServer.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\EntityFramework.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.CodeDom.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

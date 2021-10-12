@@ -25,20 +25,20 @@ namespace SentinelMvcV.ViewModel
         {
             dto.Ad = dto.Ad.Trim();
             dto.UstKodId = Check.Enum.KodTipEnum.Sube;
-            dto.IKKId = userId;
+            dto.IlkKaydedenKullaniciId = userId;
             return UtilitesService.KodAdded(dto);
         }
 
         public ServiceResult SubeUpdated(KodDTO dto, int userId)
-        {
+        { 
             dto.Ad = dto.Ad.Trim();
-            dto.SKKId = userId;
+            dto.SonKaydedenKullaniciId = userId;
             return  UtilitesService.KodUpdated(dto);
         }
 
         public ServiceResult SubeDeleted(KodDTO dto, int userId)
         {
-            dto.SKKId = userId;
+            dto.SonKaydedenKullaniciId = userId;
             return UtilitesService.KodDeleted(dto);
         }
     }

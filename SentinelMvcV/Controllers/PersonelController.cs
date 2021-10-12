@@ -31,7 +31,7 @@ namespace SentinelMvcV.Controllers
         [HttpGet]
         public IActionResult PersonelListesi()
         {
-            if (jwtToken != null || user <= 0)
+            if (jwtToken != null && user > 0)
             {
                 PersonelService.SetToken = jwtToken;
                 PersonelViewModel viewModel = new PersonelViewModel(); 
@@ -53,13 +53,35 @@ namespace SentinelMvcV.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult PersonelCrud(PersonelViewModel dto)
         {
-            if (jwtToken != null || user <= 0)
+            if (jwtToken != null && user > 0)
             {
                 PersonelService.SetToken = jwtToken;
                 if (dto.CrudPersonelDTO.Id == 0)
                 {
+                    bool tcAndSicilAny = dto.PersonelListesi.Any((a => (a.Sicil == dto.CrudPersonelDTO.Sicil || a.Tckn == dto.CrudPersonelDTO.Tckn) && a.Id != dto.CrudPersonelDTO.Id));
+                    if (tcAndSicilAny)
+                    {
+                        TempData.Add("FailedMessage", "TCKN VEYA SİCİL İLE EŞLEYEN KAYIT MEVCUT");
+                        return RedirectToAction("PersonelListesi");
+                    }
+
                     var result = dto.PersonelAdded(dto.CrudPersonelDTO, user);
 
+                    if (result.Success)
+                        TempData.Add("SuccessMessage", result.Message);
+                    else
+                        TempData.Add("FailedMessage", result.Message);
+                    return RedirectToAction("PersonelListesi");
+                }
+                else if (dto.CrudPersonelDTO.Id > 0)
+                {
+                    bool tcAndSicilAny = dto.PersonelListesi.Any((a => (a.Sicil == dto.CrudPersonelDTO.Sicil || a.Tckn == dto.CrudPersonelDTO.Tckn) && a.Id != dto.CrudPersonelDTO.Id));
+                    if (tcAndSicilAny)
+                    {
+                        TempData.Add("FailedMessage", "TCKN VEYA SİCİL İLE EŞLEYEN KAYIT MEVCUT");
+                        return RedirectToAction("PersonelListesi");
+                    }
+                    var result = dto.PersonelUpdated(dto.CrudPersonelDTO, user);
                     if (result.Success)
                         TempData.Add("SuccessMessage", result.Message);
                     else
