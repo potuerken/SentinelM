@@ -18,7 +18,7 @@ namespace SentinelMvcV.Services
                 WebApiServices.SetToken = value;
             }
         }
-
+         
         public static List<NobetSistemDTO> GetAll()
         {
             jsonData = WebApiServices.GetAll("nobetsistem", "getsistemlist").Result;
@@ -32,7 +32,7 @@ namespace SentinelMvcV.Services
 
         public static ServiceResult SistemAdded(NobetSistemDTO dto)
         {
-            jsonData = WebApiServices.Post("sistem", "sistemadded", dto).Result;
+            jsonData = WebApiServices.Post("nobetsistem", "nobetsistemadded", dto).Result;
             if (jsonData != null)
             {
                 var sistemAdded = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
@@ -43,7 +43,7 @@ namespace SentinelMvcV.Services
 
         public static ServiceResult SistemUpdated(NobetSistemDTO dto)
         {
-            jsonData = WebApiServices.Put("sistem", "sistemupdated", dto).Result;
+            jsonData = WebApiServices.Put("nobetsistem", "sistemupdated", dto).Result;
             if (jsonData != null)
             {
                 var sistemUpdated = JsonConvert.DeserializeObject<ServiceResult>(jsonData);

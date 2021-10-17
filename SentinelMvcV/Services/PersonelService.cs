@@ -11,7 +11,7 @@ namespace SentinelMvcV.Services
 {
     public static class PersonelService 
     {
-
+         
         private static string jsonData = "";
         public static string SetToken
         { 
@@ -28,6 +28,17 @@ namespace SentinelMvcV.Services
             {
                 var personelList = JsonConvert.DeserializeObject<List<PersonelDTO>>(jsonData);
                 return personelList;
+            }
+            return null;
+        }
+
+        public static List<PersonelDTO> GetSabitNobetciByNobetSistemId(int nobetSistemId)
+        {
+            jsonData = WebApiServices.GetSingle("nobetsistem", "sabitNobetci", "?sabitNobetci=", (short)nobetSistemId).Result;
+            if (jsonData != null)
+            {
+                var sabitPersonelList = JsonConvert.DeserializeObject<List<PersonelDTO>>(jsonData).OrderBy(a => a.Ad).ToList();
+                return sabitPersonelList;
             }
             return null;
         }

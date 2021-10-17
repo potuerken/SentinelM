@@ -12,6 +12,8 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Au
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Autofac.Extensions.DependencyInjection.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Autofac.Extras.DynamicProxy.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Castle.Core.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\EntityFramework.SqlServer.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\EntityFramework.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\FluentValidation.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\log4net.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Razor.Language.dll
@@ -54,6 +56,7 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Mi
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.CodeGenerators.Mvc.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\NuGet.Frameworks.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.CodeDom.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Composition.AttributedModel.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Composition.Convention.dll
@@ -61,6 +64,7 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\Sy
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Composition.Runtime.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Composition.TypedParts.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Configuration.ConfigurationManager.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Runtime.Caching.dll
@@ -122,6 +126,8 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\ru
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
@@ -147,11 +153,11 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Se
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.RazorCoreGenerate.cache
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\NobetSistem\NobetSistemListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Personel\PersonelListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
-C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Sistem\NobetSistemListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Utilites\SubeListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\_ViewImports.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\_ViewStart.cshtml.g.cs
@@ -162,9 +168,3 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Se
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.dll
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.pdb
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\SentinelMvcV.genruntimeconfig.cache
-C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\EntityFramework.SqlServer.dll
-C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\EntityFramework.dll
-C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.CodeDom.dll
-C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
-C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
-C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

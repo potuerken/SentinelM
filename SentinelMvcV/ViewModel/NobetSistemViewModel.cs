@@ -1,5 +1,6 @@
 ﻿using Check.DTO;
 using Check.Enum;
+using SentinelMvcV.Helpers;
 using SentinelMvcV.Services;
 using System;
 using System.Collections.Generic;
@@ -16,14 +17,21 @@ namespace SentinelMvcV.ViewModel
             SubeDD = UtilitesService.KodGetAll((short)KodTipEnum.Sube);
             PersonelListesi = PersonelService.GetAll().OrderBy(a => a.RutbeKod.SiraNo).ToList();
             NobetSistemListesi = NobetSistemService.GetAll();
-            SabitNobetSistemListesi = UtilitesService.KodGetAll((short)KodTipEnum.SabitNobetSistemi);
+
         }
 
         public List<PersonelDTO> PersonelListesi { get; set; }
         public List<NobetSistemDTO> NobetSistemListesi { get; set; }
         public List<KodDTO> RutbeDD { get; set; }
         public List<KodDTO> SubeDD { get; set; }
-        public List<KodDTO> SabitNobetSistemListesi { get; set; }
         public NobetSistemDTO CrudNobetSistemDTO { get; set; }
+
+        public ServiceResult NobetSistemAdded(NobetSistemDTO dto, int userId)
+        {
+            dto.IlkKaydedenKullaniciId = userId;
+            dto.SabitNobetciListesi = null;
+            return NobetSistemService.SistemAdded(dto);
+        }
+
     }
 }

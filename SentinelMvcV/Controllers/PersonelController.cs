@@ -55,38 +55,46 @@ namespace SentinelMvcV.Controllers
         {
             if (jwtToken != null && user > 0)
             {
-                PersonelService.SetToken = jwtToken;
-                if (dto.CrudPersonelDTO.Id == 0)
+                try
                 {
-                    bool tcAndSicilAny = dto.PersonelListesi.Any((a => (a.Sicil == dto.CrudPersonelDTO.Sicil || a.Tckn == dto.CrudPersonelDTO.Tckn) && a.Id != dto.CrudPersonelDTO.Id));
-                    if (tcAndSicilAny)
+                    PersonelService.SetToken = jwtToken;
+                    if (dto.CrudPersonelDTO.Id == 0)
                     {
-                        TempData.Add("FailedMessage", "TCKN VEYA SİCİL İLE EŞLEYEN KAYIT MEVCUT");
+                        bool tcAndSicilAny = dto.PersonelListesi.Any((a => (a.Sicil == dto.CrudPersonelDTO.Sicil || a.Tckn == dto.CrudPersonelDTO.Tckn) && a.Id != dto.CrudPersonelDTO.Id));
+                        if (tcAndSicilAny)
+                        {
+                            TempData.Add("FailedMessage", "TCKN VEYA SİCİL İLE EŞLEYEN KAYIT MEVCUT");
+                            return RedirectToAction("PersonelListesi");
+                        }
+
+                        var result = dto.PersonelAdded(dto.CrudPersonelDTO, user);
+
+                        if (result.Success)
+                            TempData.Add("SuccessMessage", result.Message);
+                        else
+                            TempData.Add("FailedMessage", result.Message);
                         return RedirectToAction("PersonelListesi");
                     }
-
-                    var result = dto.PersonelAdded(dto.CrudPersonelDTO, user);
-
-                    if (result.Success)
-                        TempData.Add("SuccessMessage", result.Message);
-                    else
-                        TempData.Add("FailedMessage", result.Message);
-                    return RedirectToAction("PersonelListesi");
+                    else if (dto.CrudPersonelDTO.Id > 0)
+                    {
+                        bool tcAndSicilAny = dto.PersonelListesi.Any((a => (a.Sicil == dto.CrudPersonelDTO.Sicil || a.Tckn == dto.CrudPersonelDTO.Tckn) && a.Id != dto.CrudPersonelDTO.Id));
+                        if (tcAndSicilAny)
+                        {
+                            TempData.Add("FailedMessage", "TCKN VEYA SİCİL İLE EŞLEYEN KAYIT MEVCUT");
+                            return RedirectToAction("PersonelListesi");
+                        }
+                        var result = dto.PersonelUpdated(dto.CrudPersonelDTO, user);
+                        if (result.Success)
+                            TempData.Add("SuccessMessage", result.Message);
+                        else
+                            TempData.Add("FailedMessage", result.Message);
+                        return RedirectToAction("PersonelListesi");
+                    }
                 }
-                else if (dto.CrudPersonelDTO.Id > 0)
+                catch (Exception ex)
                 {
-                    bool tcAndSicilAny = dto.PersonelListesi.Any((a => (a.Sicil == dto.CrudPersonelDTO.Sicil || a.Tckn == dto.CrudPersonelDTO.Tckn) && a.Id != dto.CrudPersonelDTO.Id));
-                    if (tcAndSicilAny)
-                    {
-                        TempData.Add("FailedMessage", "TCKN VEYA SİCİL İLE EŞLEYEN KAYIT MEVCUT");
-                        return RedirectToAction("PersonelListesi");
-                    }
-                    var result = dto.PersonelUpdated(dto.CrudPersonelDTO, user);
-                    if (result.Success)
-                        TempData.Add("SuccessMessage", result.Message);
-                    else
-                        TempData.Add("FailedMessage", result.Message);
-                    return RedirectToAction("PersonelListesi");
+                    return RedirectToAction("Index", "Home");
+                    throw;
                 }
             }
             return RedirectToAction("Index", "Home");

@@ -1,0 +1,930 @@
+﻿@using Check.DTO;
+@using SentinelMvcV.ViewModel;
+@model NobetSistemViewModel
+<!-- #region Modal -->
+@{
+    ViewData["Title"] = "Nöbet Sistem Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<PersonelDTO> personelDD = (List<PersonelDTO>)TempData["PersonelListesiDD"];
+    List<KodDTO> rutbeDD = (List<KodDTO>)TempData["RutbeDD"];
+    List<KodDTO> subeDD = (List<KodDTO>)TempData["SubeDD"];
+    List<NobetSistemDTO> nobetSistemDD = (List<NobetSistemDTO>)TempData["NobetSistemListesiDD"];
+
+    var SuccessMessage = (string)TempData["SuccessMessage"];
+    var FailedMessage = (string)TempData["FailedMessage"];
+
+    List<SelectListItem> rutbeList = new List<SelectListItem>();
+    foreach (var item in rutbeDD)
+    {
+        rutbeList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
+
+    List<SelectListItem> subeList = new List<SelectListItem>();
+    foreach (var item in subeDD)
+    {
+        subeList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
+
+    List<SelectListItem> personelList = new List<SelectListItem>();
+    foreach (var item in personelDD)
+    {
+        personelList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
+}
+<!-- #endregion -->
+<!-- #region HTML -->
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <button style="margin-top:10px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddedNobSisModal" onclick="AddedNobSisModalReflesh()">
+                    Yeni Nöbet Sistemi Ekle
+                </button>
+            </div>
+        </div>
+        @if (SuccessMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-success" role="alert">
+                <span>@SuccessMessage</span>
+            </div>
+        }
+        @if (FailedMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-danger" role="alert">
+                <span>@FailedMessage</span>
+            </div>
+        }
+        <div class="mb-2"></div>
+
+        <table id="DTNobSisListesi" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th style="text-align:center">Sistem Adı</th>
+                    <th style="text-align:center">Hafta İçi Gündüz Saati</th>
+                    <th style="text-align:center">Hafta İçi Gece Saati</th>
+                    <th style="text-align:center">Hafta Sonu Gündüz Saati</th>
+                    <th style="text-align:center">Hafta Sonu Gece Saati</th>
+                    <th style="text-align:center">Detayları</th>
+                    @*<th style="text-align:center">Şubeleri</th>
+                        <th style="text-align:center">Rütbeleri</th>
+                        <th style="text-align:center">Sabitleri</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (NobetSistemDTO item in nobetSistemDD)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@item.Ad</td>
+                        <td>@item.HaftaIciGunduzSaat</td>
+                        <td>@item.HaftaIciGeceNobetciSayisi</td>
+                        <td>@item.HaftaSonuGunduzSaat</td>
+                        <td>@item.HaftaSonuGeceSaat</td>
+                        <td style="text-align:center">
+                            <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedNobSisModal" onClick="UpdatedMessage('@item.Id', '@item.Ad', '@item.HaftaIciGunduzSaat', '@item.HaftaIciGunduzNobetciSayisi', '@item.HaftaIciYedekNobetciOlacakMi', '@item.HaftaIciGeceSaat', '@item.HaftaIciGeceNobetciSayisi', '@item.HaftaSonuGunduzSaat','@item.HaftaSonuGunduzNobetciSayisi', '@item.HaftaSonuYedekNobetciOlacakMi', '@item.HaftaSonuGeceSaat', '@item.HaftaSonuGeceNobetciSayisi', '@item.ResmiTatilGunduzSaat', '@item.ResmiTatilGunduzNobetciSayisi', '@item.ResmiTatilYedekNobetciOlacakMi', '@item.ResmiTatilGeceSaat', '@item.ResmiTatilGeceNobetciSayisi', '@item.SubeListesi.ToArray()', '@item.RutbeListesi.ToArray()', '@item.IlkKaydedenKullaniciId', '@item.IlkKayitTarihi', '@item.AktifMi')">
+                                Düzenle
+                            </button>
+                        </td>
+                        @*<td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedPersonelModal" onClick="UpdatedMessage('@item.Id','@item.Sicil','@item.Tckn','@item.Ad','@item.Soyad','@item.CinsiyetKod.Id','@item.RutbeKod.Id','@item.NobetTutabilirMi','@item.CocukDurumu','@item.CepNo', '@item.Dahili', '@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SubeKod.Id', '@item.YakinCepNo', '@item.IlkKayitTarihi', '@item.IlkKaydedenKullaniciId', '@item.AktifMi')">Düzenle</button></td>
+                            <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedPersonelModal" onClick="UpdatedMessage('@item.Id','@item.Sicil','@item.Tckn','@item.Ad','@item.Soyad','@item.CinsiyetKod.Id','@item.RutbeKod.Id','@item.NobetTutabilirMi','@item.CocukDurumu','@item.CepNo', '@item.Dahili', '@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SubeKod.Id', '@item.YakinCepNo', '@item.IlkKayitTarihi', '@item.IlkKaydedenKullaniciId', '@item.AktifMi')">Düzenle</button></td>
+                            <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedPersonelModal" onClick="UpdatedMessage('@item.Id','@item.Sicil','@item.Tckn','@item.Ad','@item.Soyad','@item.CinsiyetKod.Id','@item.RutbeKod.Id','@item.NobetTutabilirMi','@item.CocukDurumu','@item.CepNo', '@item.Dahili', '@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SubeKod.Id', '@item.YakinCepNo', '@item.IlkKayitTarihi', '@item.IlkKaydedenKullaniciId', '@item.AktifMi')">Düzenle</button></td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<!-- #endregion -->
+
+
+<!-- #region Added Modal -->
+@using (Html.BeginForm("NobetSistemCrud", "NobetSistem", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal fade bd-example-modal-lg" id="AddedNobSisModal" tabindex="-1" role="dialog" aria-labelledby="AddedNobSisModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddedNobSisModalLabel">Yeni Nöbet Sistemi Ekleme İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="AddedNobSisModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12 font-weight-bold">
+                                @Html.DisplayNameFor(a => a.CrudNobetSistemDTO.Ad)
+                            </div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.Ad, new { @class = "form-control", @id = "txtNobSisAdAdded", @required = "required", @autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gündüz saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGunduzSaat, new { @class = "form-control", @id = "txtNSHIciGunduzSaatAdded", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gunduz nob. sayisi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGunduzNobetciSayisi, new { @class = "form-control", @id = "txtNSHIciGunduzNobSayAdded", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta ici yedek nob var mi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.CheckBoxFor(a => a.CrudNobetSistemDTO.HaftaIciYedekNobetciOlacakMi, new { @class = "form-control", @id = "txtNSHIciYedNobAdded" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gece saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGeceSaat, new { @class = "form-control", @id = "txtNSHIciGeceSaatAdded", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gece nobetci sayisi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGeceNobetciSayisi, new { @class = "form-control", @id = "txtNSHIciGeceNobSayAdded", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gündüz saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGunduzSaat, new { @class = "form-control", @id = "txtNSHSonuGunduzSaatAdded", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gunduz nob. say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGunduzNobetciSayisi, new { @class = "form-control", @id = "txtNSHSonuGunduzNobSayAdded", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu yedek nob var mi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.CheckBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuYedekNobetciOlacakMi, new { @class = "form-control", @id = "txtNSHSonuYedNobAdded" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gece saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGeceSaat, new { @class = "form-control", @id = "txtNSHSonuGeceSaatAdded", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gece nob say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGeceNobetciSayisi, new { @class = "form-control", @id = "txtNSHSonuGeceNobSayAdded", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gündüz saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGunduzSaat, new { @class = "form-control", @id = "txtNSResTatGunduzSaatAdded", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gunduz nob say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGunduzNobetciSayisi, new { @class = "form-control", @id = "txtNSResTatGunduzNobSayAdded", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil yedek nob var mi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.CheckBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilYedekNobetciOlacakMi, new { @class = "form-control", @id = "txtNSResTatYedNobAdded" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gece saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGeceSaat, new { @class = "form-control", @id = "txtNSResTatGeceSaatAdded", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gece nob say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGeceNobetciSayisi, new { @class = "form-control", @id = "txtNSResTatGeceNobSayAdded", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">nöbet ifa edecek şubeler</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudNobetSistemDTO.SubeListesi,
+                                subeList,
+                                //"şube listesi",
+                                new
+                                     {
+                                    @class = "form-control",
+                                    @id = "txtNSSubeAdded",
+                                    @required = "required",
+                                    @placeholder = "Sube listesi",
+                                    data_live_search = "true",
+                                    multiple = "true",
+                                    title = "şubeleri seçin",
+                                    data_actions_box = "true"
+                                })
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">nöbet ifa edecek rütbeler</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudNobetSistemDTO.RutbeListesi,
+                                rutbeList,
+                                //"rütbe listesi",
+                                new
+                                     {
+                                    @class = "form-control",
+                                    @id = "txtNSRutbeAdded",
+                                    @required = "required",
+                                    @placeholder = "Rütbe listesi",
+                                    data_live_search = "true",
+                                    multiple = "true",
+                                    title = "rütbeleri seçin",
+                                    data_actions_box = "true"
+                                })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AddedNobSisModalReflesh()">Kapat</button>
+                    <button id="AddedNobSisModalButton" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- #endregion -->
+
+
+
+<!-- #region Updated Modal -->
+@using (Html.BeginForm("NobetSistemCrud", "NobetSistem", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(model => model.CrudNobetSistemDTO.Id, new { id = "txtNobSisIdUpdated" })
+    @Html.HiddenFor(model => model.CrudNobetSistemDTO.IlkKaydedenKullaniciId, new { id = "txtNobSisIlkKaydedenKullaniciIdUpdated" })
+    @Html.HiddenFor(model => model.CrudNobetSistemDTO.IlkKayitTarihi, new { id = "txtNobSisIlkKayitTarihiUpdated" })
+    @Html.HiddenFor(model => model.CrudNobetSistemDTO.AktifMi, new { id = "txtNobSisAktifMiUpdated" })
+
+
+    <div class="modal fade bd-example-modal-lg" id="UpdatedNobSisModal" tabindex="-1" role="dialog" aria-labelledby="UpdatedNobSisModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="UpdatedNobSisModalLabel">Yeni Personel Ekleme İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="UpdatedNobSisModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12 font-weight-bold">
+                                @Html.DisplayNameFor(a => a.CrudNobetSistemDTO.Ad)
+                            </div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.Ad, new { @class = "form-control", @id = "txtNobSisAdUpdated", @required = "required", @autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gündüz saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGunduzSaat, new { @class = "form-control", @id = "txtNSHIciGunduzSaatUpdated", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gunduz nob. sayisi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGunduzNobetciSayisi, new { @class = "form-control", @id = "txtNSHIciGunduzNobSayUpdated", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta ici yedek nob var mi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.CheckBoxFor(a => a.CrudNobetSistemDTO.HaftaIciYedekNobetciOlacakMi, new { @class = "form-control", @id = "txtNSHIciYedNobUpdated" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gece saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGeceSaat, new { @class = "form-control", @id = "txtNSHIciGeceSaatUpdated", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta içi gece nobetci sayisi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaIciGeceNobetciSayisi, new { @class = "form-control", @id = "txtNSHIciGeceNobSayUpdated", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gündüz saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGunduzSaat, new { @class = "form-control", @id = "txtNSHSonuGunduzSaatUpdated", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gunduz nob. say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGunduzNobetciSayisi, new { @class = "form-control", @id = "txtNSHSonuGunduzNobSayUpdated", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu yedek nob var mi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.CheckBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuYedekNobetciOlacakMi, new { @class = "form-control", @id = "txtNSHSonuYedNobUpdated" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gece saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGeceSaat, new { @class = "form-control", @id = "txtNSHSonuGeceSaatUpdated", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hafta sonu gece nob say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.HaftaSonuGeceNobetciSayisi, new { @class = "form-control", @id = "txtNSHSonuGeceNobSayUpdated", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gündüz saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGunduzSaat, new { @class = "form-control", @id = "txtNSResTatGunduzSaatUpdated", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gunduz nob say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGunduzNobetciSayisi, new { @class = "form-control", @id = "txtNSResTatGunduzNobSayUpdated", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil yedek nob var mi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.CheckBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilYedekNobetciOlacakMi, new { @class = "form-control", @id = "txtNSResTatYedNobUpdated" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gece saat</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGeceSaat, new { @class = "form-control", @id = "txtNSResTatGeceSaatUpdated", @required = "required", @minlength = "11", @maxlenght = "11", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">resmi tatil gece nob say</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12" style="text-align:center">
+                                @Html.TextBoxFor(a => a.CrudNobetSistemDTO.ResmiTatilGeceNobetciSayisi, new { @class = "form-control", @id = "txtNSResTatGeceNobSayUpdated", @required = "required", @minlength = "1", @maxlenght = "1", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3"></div>
+                    <div class="row">
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">nöbet ifa edecek şubeler</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudNobetSistemDTO.SubeListesi,
+                                subeList,
+                                //"şube listesi",
+                                new
+                                     {
+                                    @class = "form-control",
+                                    @id = "txtNSSubeUpdated",
+                                    @required = "required",
+                                    @placeholder = "Sube listesi",
+                                    data_live_search = "true",
+                                    multiple = "true",
+                                    title = "şubeleri seçin",
+                                    data_actions_box = "true"
+                                })
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">nöbet ifa edecek rütbeler</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudNobetSistemDTO.RutbeListesi,
+                                rutbeList,
+                                //"rütbe listesi",
+                                new
+                                     {
+                                    @class = "form-control",
+                                    @id = "txtNSRutbeUpdated",
+                                    @required = "required",
+                                    @placeholder = "Rütbe listesi",
+                                    data_live_search = "true",
+                                    multiple = "true",
+                                    title = "rütbeleri seçin",
+                                    data_actions_box = "true"
+                                })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="UpdatedNobSisModalReflesh()">Kapat</button>
+                    <button id="UpdatedNobSisModalButton" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- #endregion -->
+
+
+<!-- #region Script -->
+
+<script>
+
+    var tarih = new Date();
+    var yil = tarih.getFullYear();
+    var ay = tarih.getMonth();
+    var gun = tarih.getDate();
+    var saat = tarih.getHours();
+    var dakika = tarih.getMinutes();
+    var saniye = tarih.getSeconds();
+
+
+    $(document).ready(function () {
+        $("#txtNSHIciGunduzSaatAdded").mask('00:00-00:00');
+        $("#txtNSHIciGeceSaatAdded").mask('00:00-00:00');
+        $("#txtNSHSonuGunduzSaatAdded").mask('00:00-00:00');
+        $("#txtNSHSonuGeceSaatAdded").mask('00:00-00:00');
+        $("#txtNSResTatGunduzSaatAdded").mask('00:00-00:00');
+        $("#txtNSResTatGeceSaatAdded").mask('00:00-00:00');
+
+        $("#txtNSHIciGunduzNobSayAdded").mask('0');
+        $("#txtNSHSonuGunduzNobSayAdded").mask('0');
+        $("#txtNSResTatGunduzNobSayAdded").mask('0');
+
+        $("#txtNSHIciGunduzSaatUpdated").mask('00:00-00:00');
+        $("#txtNSHIciGeceSaatUpdated").mask('00:00-00:00');
+        $("#txtNSHSonuGunduzSaatUpdated").mask('00:00-00:00');
+        $("#txtNSHSonuGeceSaatUpdated").mask('00:00-00:00');
+        $("#txtNSResTatGunduzSaatUpdated").mask('00:00-00:00');
+        $("#txtNSResTatGeceSaatUpdated").mask('00:00-00:00');
+
+        $("#txtNSHIciGunduzNobSayUpdated").mask('0');
+        $("#txtNSHSonuGunduzNobSayUpdated").mask('0');
+        $("#txtNSResTatGunduzNobSayUpdated").mask('0');
+
+
+        $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
+        $(function () {
+            $('#txtNSSubeAdded').selectpicker(
+            );
+        });
+
+        $(function () {
+            $('#txtNSRutbeAdded').selectpicker(
+            );
+        });
+
+        $(function () {
+            $('#txtNSSubeUpdated').selectpicker();
+        });
+
+        $(function () {
+            $('#txtNSRutbeUpdated').selectpicker(
+            );
+        });
+
+        var table = $('#DTNobSisListesi').DataTable({
+            dom: 'Bfrtip',
+            // Page kaçlı listeler halinde gelmesi için
+            lengthChange: false,
+            // Page li kısmın buton şeklinde görünmesi için
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 Kayıt', '25 Kayıt', '50 Kayıt', 'Tümü']
+            ],
+            // Çıktı Butonları
+            buttons: [
+                { extend: 'copy', text: 'Kopyala' },
+                {
+                    // Çıktının tipi
+                    extend: 'excel',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    text: 'Excel'
+                },
+                // Kaçlı listeler halinde görünsün
+                { extend: 'pageLength', text: 'Görüntülenme' },
+                // PDF olarak çıktı al
+                // PDF olarak çıktı al
+                {
+                    // Çıktının tipi
+                    extend: 'pdf',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    orientation: 'landscape',
+                },
+                // Sütunlardan hangisi görünsün
+                { extend: 'colvis', text: 'Sütun Gizle/Göster' }],
+            language: {
+                "emptyTable": "Mevcut veri yok.",
+                "info": "Toplam _TOTAL_ kayıttan _START_ ile _END_ arasındaki kayıtlar.",
+                "infoEmpty": "Arama sonucu veri bulunamadı.",
+                "infoFiltered": "(toplam _MAX_ kayıt içinde arandı.)",
+                "loadingRecords": "Yükleniyor...",
+                "search": "Ara:",
+                "zeroRecords": "Hiçbir eşleşen kayıt bulunamadı",
+                "paginate": {
+                    "first": "İlk",
+                    "last": "Son",
+                    "next": "Sonraki",
+                    "previous": "Önceki"
+                }
+            },
+            // Alttaki sayfa numaralarının hepsi görünsün
+            "pagingType": "full_numbers",
+            // Sütunların sıralamasını kullanıcının değiştirilebilir olması yapar.
+            colReorder: true,
+            // columnDef özelliğini açar olarak anladım.
+            rowReorder: true,
+            // Targets olarak seçtiğin indeks sıralamasına göre sütunların order özelliği açılır kapanır.
+            columnDefs: [
+                { width: '4%', targets: 0 },
+                { searchable: true, orderable: true, className: 'reorder', targets: [1] },
+                { searchable: false, orderable: false, targets: '_all' }
+            ],
+            "scrollX": true,
+            order: [[1, "asc"]],
+            stateSave: true
+        });
+
+        table.on('order.dt search.dt', function () {
+            table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+                table.cell(cell).invalidate('dom');
+            });
+        }).draw();
+
+
+        // Butonların bootstrap tipi görünürlüğü sağlar
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+
+        // Menüdeki üst başlığın kalın olması için
+        $("#listUtilitesAnaBaslik").attr('class', 'nav-item active');
+        // Menünün tüm alt başlıklarını açık tutmak için
+        $("#utilitesMenusu").attr('class', 'collapse show');
+        // Seçilen alt başlığın baskın olması için
+        $("#nobetSistemButonu").attr('class', 'collapse-item active');
+        // Seçildiğinde okun aşağı doğru bakması için
+        $("#utilitesOkYonu").toggleClass('collapsed');
+
+    });
+
+    function AddedNobSisModalReflesh() {
+        $("#txtNSHIciGunduzSaatAdded").val(null);
+        $("#txtNSHIciGunduzNobSayAdded").val(null);
+        $("#txtNSHIciGeceSaatAdded").val(null);
+        $("#txtNSHIciGeceNobSayAdded").val(null);
+        $("#txtNSHSonuGunduzSaatAdded").val(null);
+        $("#txtNSHSonuGunduzNobSayAdded").val(null);
+        $("#txtNSHSonuGeceSaatAdded").val(null);
+        $("#txtNSHSonuGeceNobSayAdded").val(null);
+        $("#txtNSResTatGunduzSaatAdded").val(null);
+        $("#txtNSResTatGunduzNobSayAdded").val(null);
+        $("#txtNSResTatGeceSaatAdded").val(null);
+        $("#txtNSResTatGeceNobSayAdded").val(null);
+        $("#txtNSSubeAdded").val(null);
+        $("#txtNSRutbeAdded").val(null);
+        $('#txtNSSubeAdded').selectpicker('deselectAll');
+        $("#txtNSRutbeAdded").selectpicker('deselectAll');
+
+
+
+        $("#txtNSHIciYedNobAdded").prop("checked", false);
+        $("#txtNSHSonuYedNobAdded").prop("checked", false);
+        $("#txtNSResTatYedNobAdded").prop("checked", false);
+    }
+
+    function UpdatedNobSisModalReflesh() {
+        $("#txtNSHIciGunduzSaatUpdated").val(null);
+        $("#txtNSHIciGunduzNobSayUpdated").val(null);
+        $("#txtNSHIciGeceSaatUpdated").val(null);
+        $("#txtNSHIciGeceNobSayUpdated").val(null);
+        $("#txtNSHSonuGunduzSaatUpdated").val(null);
+        $("#txtNSHSonuGunduzNobSayUpdated").val(null);
+        $("#txtNSHSonuGeceSaatUpdated").val(null);
+        $("#txtNSHSonuGeceNobSayUpdated").val(null);
+        $("#txtNSResTatGunduzSaatUpdated").val(null);
+        $("#txtNSResTatGunduzNobSayUpdated").val(null);
+        $("#txtNSResTatGeceSaatUpdated").val(null);
+        $("#txtNSResTatGeceNobSayUpdated").val(null);
+        $("#txtNSSubeUpdated").val(null);
+        $("#txtNSRutbeUpdated").val(null);
+        $('#txtNSSubeUpdated').selectpicker('deselectAll');
+        $("#txtNSRutbeUpdated").selectpicker('deselectAll');
+        $("#txtNobSisIlkKaydedenKullaniciIdUpdated").val(null);
+        $("#txtNobSisIlkKayitTarihiUpdated").val(null);
+        $("#txtNobSisAktifMiUpdated").val(null);
+
+
+
+        $("#txtNSHIciYedNobUpdated").prop("checked", false);
+        $("#txtNSHSonuYedNobUpdated").prop("checked", false);
+        $("#txtNSResTatYedNobUpdated").prop("checked", false);
+    }
+
+    function UpdatedMessage(id, ad, hicigunduzsaat, hicinobetci, hiciyedekmi, hicigecesaat,
+        hicigecenobetci, hsonugunduzsaat, hsonugunduznobetci, hsonuyedekmi,hsonugecesaat, hsonugecenobetci, rtatilgunduzsaat, rtatilgunduznobetci, rtatilyedekmi, rtatilgecesaat, rtatilgecenobetci, subelistesi, rutbelistesi, kullaniciid, ilkkayittarihi, aktifmi) {
+        $("#txtNobSisIdUpdated").val(id);
+        $("#txtNobSisAdUpdated").val(ad);
+        $("#txtNSHIciGunduzSaatUpdated").val(hicigunduzsaat);
+        $("#txtNSHIciGunduzNobSayUpdated").val(hicinobetci);
+        $("#txtNSHIciGeceSaatUpdated").val(hicigecesaat);
+        $("#txtNSHIciGeceNobSayUpdated").val(hicigecenobetci);
+        $("#txtNSHSonuGunduzSaatUpdated").val(hsonugunduzsaat);
+        $("#txtNSHSonuGunduzNobSayUpdated").val(hsonugunduznobetci);
+        $("#txtNSHSonuGeceSaatUpdated").val(hsonugecesaat);
+        $("#txtNSHSonuGeceNobSayUpdated").val(hsonugecenobetci);
+        $("#txtNSResTatGunduzSaatUpdated").val(rtatilgunduzsaat);
+        $("#txtNSResTatGunduzNobSayUpdated").val(rtatilgunduznobetci);
+        $("#txtNSResTatGeceSaatUpdated").val(rtatilgecesaat);
+        $("#txtNSResTatGeceNobSayUpdated").val(rtatilgecenobetci);
+        $("#txtNobSisIlkKaydedenKullaniciIdUpdated").val(kullaniciid);
+        $("#txtNobSisIlkKayitTarihiUpdated").val(ilkkayittarihi);
+        $("#txtNobSisAktifMiUpdated").val(aktifmi);
+
+
+        $("#txtNSSubeUpdated").selectpicker().val(subelistesi);
+
+
+        //$("#txtNSSubeUpdated").selectpicker("val", subelistesi);
+        
+        $("#txtNSSubeUpdated").selectpicker("refresh");
+        $("#txtNSRutbeUpdated").selectpicker().val(rutbelistesi);
+
+        //$("#txtNSRutbeUpdated").selectpicker("val", rutbelistesi);
+        $("#txtNSRutbeUpdated").selectpicker("refresh");
+
+
+
+        if (hiciyedekmi == "True") {
+            $("#txtNSHIciYedNobUpdated").prop("checked", true);
+        }
+        else {
+            $("#txtNSHIciYedNobUpdated").prop("checked", false);
+        }
+        if (hsonuyedekmi == "True") {
+            $("#txtNSHSonuYedNobUpdated").prop("checked", true);
+        }
+        else {
+            $("#txtNSHSonuYedNobUpdated").prop("checked", false);
+        }
+        if (rtatilyedekmi == "True") {
+            $("#txtNSResTatYedNobUpdated").prop("checked", true);
+        }
+        else {
+            $("#txtNSResTatYedNobUpdated").prop("checked", false);
+        }
+        $(function () {
+            $('#txtNobSisAdUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHIciGunduzSaatUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHIciGunduzNobSayUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHIciYedNobUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHIciGeceSaatUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHIciGeceNobSayUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHSonuGunduzSaatUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHSonuGunduzNobSayUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHSonuYedNobUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHSonuGeceSaatUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSHSonuGeceNobSayUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSResTatGunduzSaatUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSResTatGunduzNobSayUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSResTatYedNobUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSResTatGeceSaatUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+            $('#txtNSResTatGeceNobSayUpdated').on('keyup change', function () {
+                if (this.value.length > 0) {
+                    $("#UpdatedNobSisModalButton").prop("disabled", false);
+                } else {
+                    $("#UpdatedNobSisModalButton").prop("disabled", true);
+                }
+            });
+        });
+    }
+</script>
+
+<!-- #endregion -->
