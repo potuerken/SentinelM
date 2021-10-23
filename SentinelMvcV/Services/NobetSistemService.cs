@@ -43,7 +43,18 @@ namespace SentinelMvcV.Services
 
         public static ServiceResult SistemUpdated(NobetSistemDTO dto)
         {
-            jsonData = WebApiServices.Put("nobetsistem", "sistemupdated", dto).Result;
+            jsonData = WebApiServices.Put("nobetsistem", "nobetsistemupdated", dto).Result;
+            if (jsonData != null)
+            {
+                var sistemUpdated = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return sistemUpdated;
+            }
+            return null;
+        }
+
+        public static ServiceResult SistemSabitAdded(NobetSistemSabitNobetciIliskiDTO dto)
+        {
+            jsonData = WebApiServices.Post("nobetsistem", "nobetsistemsabitadded", dto).Result;
             if (jsonData != null)
             {
                 var sistemUpdated = JsonConvert.DeserializeObject<ServiceResult>(jsonData);

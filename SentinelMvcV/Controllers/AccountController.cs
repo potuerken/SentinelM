@@ -31,7 +31,7 @@ namespace SentinelMvcV.Controllers
             {
                 SentinelMvcV.Helpers.AccessToken token = JsonConvert.DeserializeObject<AccessToken>(jsonToken);
                 if (SetSessions(token))
-                    return RedirectToAction("PersonelListesi", "Personel");
+                    return RedirectToAction("NobetSistemListesi", "NobetSistem");
             }
             return RedirectToAction("Index", "Home");
         }

@@ -9,6 +9,7 @@
     List<PersonelDTO> personelDD = (List<PersonelDTO>)TempData["PersonelListesiDD"];
     List<KodDTO> rutbeDD = (List<KodDTO>)TempData["RutbeDD"];
     List<KodDTO> subeDD = (List<KodDTO>)TempData["SubeDD"];
+    List<KodDTO> sabitnobetDD = (List<KodDTO>)TempData["SabitNobetDD"];
     List<NobetSistemDTO> nobetSistemDD = (List<NobetSistemDTO>)TempData["NobetSistemListesiDD"];
 
     var SuccessMessage = (string)TempData["SuccessMessage"];
@@ -38,6 +39,16 @@
     foreach (var item in personelDD)
     {
         personelList.Add(new SelectListItem()
+        {
+            Text = item.Ad + " " + item.Soyad + " (" + item.Sicil + ")",
+            Value = item.Id.ToString()
+        });
+    }
+
+    List<SelectListItem> sabitnobetList = new List<SelectListItem>();
+    foreach (var item in sabitnobetDD)
+    {
+        sabitnobetList.Add(new SelectListItem()
         {
             Text = item.Ad,
             Value = item.Id.ToString()
@@ -79,9 +90,7 @@
                     <th style="text-align:center">Hafta Sonu Gündüz Saati</th>
                     <th style="text-align:center">Hafta Sonu Gece Saati</th>
                     <th style="text-align:center">Detayları</th>
-                    @*<th style="text-align:center">Şubeleri</th>
-                        <th style="text-align:center">Rütbeleri</th>
-                        <th style="text-align:center">Sabitleri</th>*@
+                    <th style="text-align:center">Sabitleri</th>
                 </tr>
             </thead>
             <tbody>
@@ -95,13 +104,12 @@
                         <td>@item.HaftaSonuGunduzSaat</td>
                         <td>@item.HaftaSonuGeceSaat</td>
                         <td style="text-align:center">
-                            <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedNobSisModal" onClick="UpdatedMessage('@item.Id', '@item.Ad', '@item.HaftaIciGunduzSaat', '@item.HaftaIciGunduzNobetciSayisi', '@item.HaftaIciYedekNobetciOlacakMi', '@item.HaftaIciGeceSaat', '@item.HaftaIciGeceNobetciSayisi', '@item.HaftaSonuGunduzSaat','@item.HaftaSonuGunduzNobetciSayisi', '@item.HaftaSonuYedekNobetciOlacakMi', '@item.HaftaSonuGeceSaat', '@item.HaftaSonuGeceNobetciSayisi', '@item.ResmiTatilGunduzSaat', '@item.ResmiTatilGunduzNobetciSayisi', '@item.ResmiTatilYedekNobetciOlacakMi', '@item.ResmiTatilGeceSaat', '@item.ResmiTatilGeceNobetciSayisi', '@item.SubeListesi.ToArray()', '@item.RutbeListesi.ToArray()', '@item.IlkKaydedenKullaniciId', '@item.IlkKayitTarihi', '@item.AktifMi')">
+                            <button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedNobSisModal" onClick="UpdatedMessage('@item.Id', '@item.Ad', '@item.HaftaIciGunduzSaat', '@item.HaftaIciGunduzNobetciSayisi', '@item.HaftaIciYedekNobetciOlacakMi', '@item.HaftaIciGeceSaat', '@item.HaftaIciGeceNobetciSayisi', '@item.HaftaSonuGunduzSaat', '@item.HaftaSonuGunduzNobetciSayisi', '@item.HaftaSonuYedekNobetciOlacakMi',
+                              '@item.HaftaSonuGeceSaat', '@item.HaftaSonuGeceNobetciSayisi','@item.ResmiTatilGunduzSaat','@item.ResmiTatilGunduzNobetciSayisi', '@item.ResmiTatilYedekNobetciOlacakMi', '@item.ResmiTatilGeceSaat','@item.ResmiTatilGeceNobetciSayisi','@item.SubeList', '@item.RutbeList','@item.IlkKaydedenKullaniciId','@item.IlkKayitTarihi','@item.AktifMi')">
                                 Düzenle
                             </button>
                         </td>
-                        @*<td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedPersonelModal" onClick="UpdatedMessage('@item.Id','@item.Sicil','@item.Tckn','@item.Ad','@item.Soyad','@item.CinsiyetKod.Id','@item.RutbeKod.Id','@item.NobetTutabilirMi','@item.CocukDurumu','@item.CepNo', '@item.Dahili', '@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SubeKod.Id', '@item.YakinCepNo', '@item.IlkKayitTarihi', '@item.IlkKaydedenKullaniciId', '@item.AktifMi')">Düzenle</button></td>
-                            <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedPersonelModal" onClick="UpdatedMessage('@item.Id','@item.Sicil','@item.Tckn','@item.Ad','@item.Soyad','@item.CinsiyetKod.Id','@item.RutbeKod.Id','@item.NobetTutabilirMi','@item.CocukDurumu','@item.CepNo', '@item.Dahili', '@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SubeKod.Id', '@item.YakinCepNo', '@item.IlkKayitTarihi', '@item.IlkKaydedenKullaniciId', '@item.AktifMi')">Düzenle</button></td>
-                            <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#UpdatedPersonelModal" onClick="UpdatedMessage('@item.Id','@item.Sicil','@item.Tckn','@item.Ad','@item.Soyad','@item.CinsiyetKod.Id','@item.RutbeKod.Id','@item.NobetTutabilirMi','@item.CocukDurumu','@item.CepNo', '@item.Dahili', '@item.BirimBaslamaTarihi.ToString(string.Format("dd/MM/yyyy"))', '@item.SubeKod.Id', '@item.YakinCepNo', '@item.IlkKayitTarihi', '@item.IlkKaydedenKullaniciId', '@item.AktifMi')">Düzenle</button></td>*@
+                        <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#AddedNSSabitNobetModal" onClick="AddedNSSabitNobetMessage('@item.Id', '@item.SabitciList')">Sabitçiler</button></td>
                     </tr>
                 }
             </tbody>
@@ -110,8 +118,6 @@
     </div>
 </div>
 <!-- #endregion -->
-
-
 <!-- #region Added Modal -->
 @using (Html.BeginForm("NobetSistemCrud", "NobetSistem", FormMethod.Post))
 {
@@ -326,9 +332,6 @@
     </div>
 }
 <!-- #endregion -->
-
-
-
 <!-- #region Updated Modal -->
 @using (Html.BeginForm("NobetSistemCrud", "NobetSistem", FormMethod.Post))
 {
@@ -508,13 +511,14 @@
                                 new
                                      {
                                     @class = "form-control",
-                                    @id = "txtNSSubeUpdated",
-                                    @required = "required",
-                                    @placeholder = "Sube listesi",
-                                    data_live_search = "true",
-                                    multiple = "true",
-                                    title = "şubeleri seçin",
-                                    data_actions_box = "true"
+                                         @id = "txtNSSubeUpdated",
+                                         @name = "txtNSSubeUpdated[]",
+                                         @required = "required",
+                                         @placeholder = "Sube listesi",
+                                         data_live_search = "true",
+                                         multiple = "true",
+                                         title = "şubeleri seçin",
+                                         data_actions_box = "true"
                                 })
                             </div>
                         </div>
@@ -549,8 +553,96 @@
     </div>
 }
 <!-- #endregion -->
+<!-- #region Sabit Nobetci Addded Modal -->
+@using (Html.BeginForm("NobetSistemSabitlerCrud", "NobetSistem", FormMethod.Post))
+
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(model => model.CrudSabitNobetciDTO.NobetSistemId, new { id = "txtNobSisSabitNobetSistemIdAdded" })
 
 
+    <div class="modal fade bd-example-modal-lg" id="AddedNSSabitNobetModal" tabindex="-1" role="dialog" aria-labelledby="AddedNSSabitNobetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddedNSSabitNobetModalLabel">sabit nöbetçileri ekleme işlemleri</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="AddedNSSabitNobetModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">personel listesi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudSabitNobetciDTO.SabitPersonel.Id,
+                                personelList,
+                                new
+                                     {
+                                    @class = "form-control",
+                                         @id = "txtNSSabitPersonelAdded",
+                                         @required = "required",
+                                         @placeholder = "Personel Listesi",
+                                         data_live_search = "true",
+                                         title = "şubeleri seçin"
+                                })
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">sabit nöbet sistemleri</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudSabitNobetciDTO.SabitNobetSistemiKod.Id,
+                                sabitnobetList,
+                                new
+                                     {
+                                    @class = "form-control",
+                                    @id = "txtNSSabitNobetSistemiAdded",
+                                    @required = "required",
+                                    @placeholder = "sabit sistemi",
+                                    data_live_search = "true",
+                                    title = "sabit sistemi"
+                                })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3" />
+                    <div class="row">
+                        <table id="txtNobSisSabitcileri" class="table table-striped table-bordered" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>SN</th>
+                                    <th style="text-align:center">Sistem Adı</th>
+                                    <th style="text-align:center">Hafta İçi Gündüz Saati</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @*@foreach (var item in nobetSistemDD.Where(a=>a.Id == 10))
+                                {
+                                    <tr>
+                                        <td></td>
+                                        <td>@item.SabitPersonel.Ad</td>
+                                        <td>@item.SabitNobetSistemiKod.Ad</td>
+                                    </tr>
+                                }*@
+                            </tbody>
+                        </table>
+
+
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AddedNSSabitNobetModalReflesh()">Kapat</button>
+                    <button id="UpdatedNobSisModalButton" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- #endregion -->
 <!-- #region Script -->
 
 <script>
@@ -575,6 +667,9 @@
         $("#txtNSHIciGunduzNobSayAdded").mask('0');
         $("#txtNSHSonuGunduzNobSayAdded").mask('0');
         $("#txtNSResTatGunduzNobSayAdded").mask('0');
+        $("#txtNSHIciGeceNobSayAdded").mask('0');
+        $("#txtNSHSonuGeceNobSayAdded").mask('0');
+        $("#txtNSResTatGeceNobSayAdded").mask('0');
 
         $("#txtNSHIciGunduzSaatUpdated").mask('00:00-00:00');
         $("#txtNSHIciGeceSaatUpdated").mask('00:00-00:00');
@@ -606,6 +701,14 @@
 
         $(function () {
             $('#txtNSRutbeUpdated').selectpicker(
+            );
+        });
+        $(function () {
+            $('#txtNSSabitPersonelAdded').selectpicker(
+            );
+        });
+        $(function () {
+            $('#txtNSSabitNobetSistemiAdded').selectpicker(
             );
         });
 
@@ -703,6 +806,23 @@
         // Seçildiğinde okun aşağı doğru bakması için
         $("#utilitesOkYonu").toggleClass('collapsed');
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
     });
 
     function AddedNobSisModalReflesh() {
@@ -758,8 +878,101 @@
         $("#txtNSResTatYedNobUpdated").prop("checked", false);
     }
 
+    function AddedNSSabitNobetMessage(id, sabitciler) {
+
+        $("#txtNobSisSabitNobetSistemIdAdded").val(id);
+
+        $('#txtNSSubeUpdated').DataTable('val', JSON.parse(sabitciler));
+
+        var table = $('#dt').DataTable({
+            dom: 'Bfrtip',
+            // Page kaçlı listeler halinde gelmesi için
+            lengthChange: false,
+            // Page li kısmın buton şeklinde görünmesi için
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 Kayıt', '25 Kayıt', '50 Kayıt', 'Tümü']
+            ],
+            // Çıktı Butonları
+            buttons: [
+                { extend: 'copy', text: 'Kopyala' },
+                {
+                    // Çıktının tipi
+                    extend: 'excel',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    text: 'Excel'
+                },
+                // Kaçlı listeler halinde görünsün
+                { extend: 'pageLength', text: 'Görüntülenme' },
+                // PDF olarak çıktı al
+                // PDF olarak çıktı al
+                {
+                    // Çıktının tipi
+                    extend: 'pdf',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    orientation: 'landscape',
+                },
+                // Sütunlardan hangisi görünsün
+                { extend: 'colvis', text: 'Sütun Gizle/Göster' }],
+            language: {
+                "emptyTable": "Mevcut veri yok.",
+                "info": "Toplam _TOTAL_ kayıttan _START_ ile _END_ arasındaki kayıtlar.",
+                "infoEmpty": "Arama sonucu veri bulunamadı.",
+                "infoFiltered": "(toplam _MAX_ kayıt içinde arandı.)",
+                "loadingRecords": "Yükleniyor...",
+                "search": "Ara:",
+                "zeroRecords": "Hiçbir eşleşen kayıt bulunamadı",
+                "paginate": {
+                    "first": "İlk",
+                    "last": "Son",
+                    "next": "Sonraki",
+                    "previous": "Önceki"
+                }
+            },
+            // Alttaki sayfa numaralarının hepsi görünsün
+            "pagingType": "full_numbers",
+            // Sütunların sıralamasını kullanıcının değiştirilebilir olması yapar.
+            colReorder: true,
+            // columnDef özelliğini açar olarak anladım.
+            rowReorder: true,
+            // Targets olarak seçtiğin indeks sıralamasına göre sütunların order özelliği açılır kapanır.
+            columnDefs: [
+                { width: '4%', targets: 0 },
+                { searchable: true, orderable: true, className: 'reorder', targets: [1] },
+                { searchable: false, orderable: false, targets: '_all' }
+            ],
+            "scrollX": true,
+            order: [[1, "asc"]],
+            stateSave: true
+        });
+
+
+   
+
+    }
+
+    function txtNobSisSabitNobetSistemIdAdded() {
+        $("#txtNobSisSabitNobetSistemIdAdded").val(null);
+    }
+
     function UpdatedMessage(id, ad, hicigunduzsaat, hicinobetci, hiciyedekmi, hicigecesaat,
-        hicigecenobetci, hsonugunduzsaat, hsonugunduznobetci, hsonuyedekmi,hsonugecesaat, hsonugecenobetci, rtatilgunduzsaat, rtatilgunduznobetci, rtatilyedekmi, rtatilgecesaat, rtatilgecenobetci, subelistesi, rutbelistesi, kullaniciid, ilkkayittarihi, aktifmi) {
+        hicigecenobetci, hsonugunduzsaat, hsonugunduznobetci, hsonuyedekmi, hsonugecesaat, hsonugecenobetci, rtatilgunduzsaat, rtatilgunduznobetci, rtatilyedekmi, rtatilgecesaat, rtatilgecenobetci, subelistesi, rutbelistesi, kullaniciid, ilkkayittarihi, aktifmi) {
+
+
+        $('#txtNSSubeUpdated').selectpicker('val', JSON.parse(subelistesi));
+        $('#txtNSRutbeUpdated').selectpicker('val', JSON.parse(rutbelistesi));
+
+
         $("#txtNobSisIdUpdated").val(id);
         $("#txtNobSisAdUpdated").val(ad);
         $("#txtNSHIciGunduzSaatUpdated").val(hicigunduzsaat);
@@ -777,20 +990,6 @@
         $("#txtNobSisIlkKaydedenKullaniciIdUpdated").val(kullaniciid);
         $("#txtNobSisIlkKayitTarihiUpdated").val(ilkkayittarihi);
         $("#txtNobSisAktifMiUpdated").val(aktifmi);
-
-
-        $("#txtNSSubeUpdated").selectpicker().val(subelistesi);
-
-
-        //$("#txtNSSubeUpdated").selectpicker("val", subelistesi);
-        
-        $("#txtNSSubeUpdated").selectpicker("refresh");
-        $("#txtNSRutbeUpdated").selectpicker().val(rutbelistesi);
-
-        //$("#txtNSRutbeUpdated").selectpicker("val", rutbelistesi);
-        $("#txtNSRutbeUpdated").selectpicker("refresh");
-
-
 
         if (hiciyedekmi == "True") {
             $("#txtNSHIciYedNobUpdated").prop("checked", true);
