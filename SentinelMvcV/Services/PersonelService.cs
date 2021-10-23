@@ -66,6 +66,29 @@ namespace SentinelMvcV.Services
         }
 
 
+        public static List<IzinMazeretDTO> IzinListesi()
+        {
+            jsonData = WebApiServices.GetAll("personel", "iziListesi").Result;
+            if (jsonData != null)
+            {
+                var izinList = JsonConvert.DeserializeObject<List<IzinMazeretDTO>>(jsonData);
+                return izinList;
+            }
+            return null;
+        }
+
+
+        public static ServiceResult IzinAdded(IzinMazeretDTO dto)
+        {
+            jsonData = WebApiServices.Post("personel", "izinAdded", dto).Result;
+            if (jsonData != null)
+            {
+                var izinAdded = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return izinAdded;
+            }
+            return null;
+        }
+
         //public static ServiceResult PersonelDeleted(PersonelDTO dto)
         //{
         //    jsonData = WebApiServices.Post("personel", "personeldeleted", dto).Result;

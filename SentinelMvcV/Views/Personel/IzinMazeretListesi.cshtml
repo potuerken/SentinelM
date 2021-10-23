@@ -1,0 +1,309 @@
+﻿@using Check.DTO;
+@using SentinelMvcV.ViewModel;
+@model IzinMazeretViewModel
+@{
+    ViewData["Title"] = "İzin Mazeret Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<KodDTO> izinDD = (List<KodDTO>)TempData["IzinDD"];
+    List<PersonelDTO> personelDD = (List<PersonelDTO>)TempData["PersonelListesi"];
+    List<IzinMazeretDTO> izinMazeretListesi = (List<IzinMazeretDTO>)TempData["IzinListesi"];
+
+    var SuccessMessage = (string)TempData["SuccessMessage"];
+    var FailedMessage = (string)TempData["FailedMessage"];
+
+    List<SelectListItem> izinList = new List<SelectListItem>();
+    foreach (var item in izinDD)
+    {
+        izinList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
+
+    List<SelectListItem> personelList = new List<SelectListItem>();
+    foreach (var item in personelDD)
+    {
+        personelList.Add(new SelectListItem()
+        {
+            Text = item.Ad + " " + item.Soyad + " (" + item.Sicil + ")",
+            Value = item.Id.ToString()
+        });
+    }
+
+
+}
+
+<!-- #region HTML -->
+
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <button style="margin-top:10px;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddedIzinModal" onclick="AddedIzinModalReflesh()">
+                    yeni izin mazeret ekle
+                </button>
+            </div>
+        </div>
+        @if (SuccessMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-success" role="alert">
+                <span>@SuccessMessage</span>
+            </div>
+        }
+        @if (FailedMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-danger" role="alert">
+                <span>@FailedMessage</span>
+            </div>
+        }
+        <div class="mb-2"></div>
+
+        <table id="DTIzinListesi" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th style="text-align:center">Sicil</th>
+                    <th style="text-align:center">Ad</th>
+                    <th style="text-align:center">Soyad</th>
+                    <th style="text-align:center">İzin Başlangıç</th>
+                    <th style="text-align:center">İzin Bitiş</th>
+                    <th style="text-align:center">İzin Sebep</th>
+                    <th style="text-align:center">İzin Durumu</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (IzinMazeretDTO item in izinMazeretListesi)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@item.Personel.Sicil</td>
+                        <td>@item.Personel.Ad</td>
+                        <td>@item.Personel.Soyad</td>
+                        <td>@item.BaslangicTarihi</td>
+                        <td>@item.BitisTarihi</td>
+                        <td>@item.IzinMazeretKod.Ad</td>
+                        <td>@item.Durumu</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- #endregion -->
+<!-- #region Added Modal -->
+
+@using (Html.BeginForm("IzinCrud", "Personel", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal fade bd-example-modal-lg" id="AddedIzinModal" tabindex="-1" role="dialog" aria-labelledby="AddedIzinModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddedIzinModalLabel">personei izne/mazerete çıkarma işlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="AddedIzinModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="col-md-12 font-weight-bold">izin/mazerete çıkacak personeli seçin</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudIzin.Personel.Id, personelList, new { @class = "form-control", @id = "txtIzinPersonelAdded", @placeholder = "izne çıkacak personel", @required = "required", data_live_search = "true", title = "personeli seçin" })
+                            </div>
+                            <div class="mb-3"></div>
+
+                            <div class="col-md-12 font-weight-bold">izin/mazeret başlangıç tarihi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudIzin.BaslangicTarihi, new { @class = "form-control", @id = "txtIzinBaslangicTarihi", @placeholder = "başlangıç tarihi", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="col-md-12 font-weight-bold">izin/mazeret sebebi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudIzin.IzinMazeretKod.Id, izinList, new { @class = "form-control", @id = "txtIzinSebepAdded", @placeholder = "sebebi seçin", @required = "required", data_live_search = "true", title = "sebebi seçin" })
+                            </div>
+                            <div class="mb-3"></div>
+
+                            <div class="col-md-12 font-weight-bold">izin/mazeret başlangıç tarihi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudIzin.BitisTarihi, new { @class = "form-control", @id = "txtIzinBitisTarihi", @placeholder = "bitiş tarihi", @required = "required", @autocomplete = "off" })
+                            </div>
+                            <div class="mb-3"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AddedIzinModalReflesh()">Kapat</button>
+                    <button id="AddedIzinModalButton" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- #endregion -->
+<!-- #region Script -->
+
+<script>
+
+    var tarih = new Date();
+    var yil = tarih.getFullYear();
+    var ay = tarih.getMonth();
+    var gun = tarih.getDate();
+    var saat = tarih.getHours();
+    var dakika = tarih.getMinutes();
+    var saniye = tarih.getSeconds();
+
+
+    $(document).ready(function () {
+        $('#txtIzinBaslangicTarihi').datepicker({
+            format: "dd/mm/yyyy",
+            weekstart: 1,
+            todaybtn: true,
+            clearbtn: true,
+            language: "tr",
+            daysofweekhighlighted: "0,6",
+            autoclose: true,
+            todayhighlight: true
+        });
+
+        $('#txtIzinBitisTarihi').datepicker({
+            format: "dd/mm/yyyy",
+            weekstart: 1,
+            todaybtn: true,
+            clearbtn: true,
+            language: "tr",
+            daysofweekhighlighted: "0,6",
+            autoclose: true,
+            todayhighlight: true
+        });
+        $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
+        $(function () {
+            $('#txtIzinPersonelAdded').selectpicker(
+            );
+        });
+
+        $(function () {
+            $('#txtIzinSebepAdded').selectpicker(
+            );
+        });
+
+        var table = $('#DTIzinListesi').DataTable({
+            dom: 'Bfrtip',
+            // Page kaçlı listeler halinde gelmesi için
+            lengthChange: false,
+            // Page li kısmın buton şeklinde görünmesi için
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 Kayıt', '25 Kayıt', '50 Kayıt', 'Tümü']
+            ],
+            // Çıktı Butonları
+            buttons: [
+                { extend: 'copy', text: 'Kopyala' },
+                {
+                    // Çıktının tipi
+                    extend: 'excel',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    text: 'Excel'
+                },
+                // Kaçlı listeler halinde görünsün
+                { extend: 'pageLength', text: 'Görüntülenme' },
+                // PDF olarak çıktı al
+                // PDF olarak çıktı al
+                {
+                    // Çıktının tipi
+                    extend: 'pdf',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    orientation: 'landscape',
+                },
+                // Sütunlardan hangisi görünsün
+                { extend: 'colvis', text: 'Sütun Gizle/Göster' }],
+            language: {
+                "emptyTable": "Mevcut veri yok.",
+                "info": "Toplam _TOTAL_ kayıttan _START_ ile _END_ arasındaki kayıtlar.",
+                "infoEmpty": "Arama sonucu veri bulunamadı.",
+                "infoFiltered": "(toplam _MAX_ kayıt içinde arandı.)",
+                "loadingRecords": "Yükleniyor...",
+                "search": "Ara:",
+                "zeroRecords": "Hiçbir eşleşen kayıt bulunamadı",
+                "paginate": {
+                    "first": "İlk",
+                    "last": "Son",
+                    "next": "Sonraki",
+                    "previous": "Önceki"
+                }
+            },
+            // Alttaki sayfa numaralarının hepsi görünsün
+            "pagingType": "full_numbers",
+            // Sütunların sıralamasını kullanıcının değiştirilebilir olması yapar.
+            colReorder: true,
+            // columnDef özelliğini açar olarak anladım.
+            rowReorder: true,
+            // Targets olarak seçtiğin indeks sıralamasına göre sütunların order özelliği açılır kapanır.
+            columnDefs: [
+                { width: '4%', targets: 0 },
+                { searchable: true, orderable: true, className: 'reorder', targets: [1] },
+                { searchable: false, orderable: false, targets: '_all' }
+            ],
+            "scrollX": true,
+            order: [[1, "asc"]],
+            stateSave: true
+        });
+
+        table.on('order.dt search.dt', function () {
+            table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+                table.cell(cell).invalidate('dom');
+            });
+        }).draw();
+
+
+        // Butonların bootstrap tipi görünürlüğü sağlar
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+
+        // Menüdeki üst başlığın kalın olması için
+        $("#listPersonelAnaBaslik").attr('class', 'nav-item active');
+        // Menünün tüm alt başlıklarını açık tutmak için
+        $("#personelMenusu").attr('class', 'collapse show');
+        // Seçilen alt başlığın baskın olması için
+        $("#izinButonu").attr('class', 'collapse-item active');
+        // Seçildiğinde okun aşağı doğru bakması için
+        $("#personelOkYonu").toggleClass('collapsed');
+
+        
+
+    });
+
+    function AddedIzinModalReflesh() {
+        $("#txtIzinPersonelAdded").selectpicker('val', null);
+        $("#txtIzinSebepAdded").selectpicker('val', null);
+        $("#txtIzinBaslangicTarihi").val(null);
+        $("#txtIzinBitisTarihi").val(null);
+    }
+</script>
+
+<!-- #endregion -->

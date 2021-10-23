@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SentinelMvcV.Services;
 using SentinelMvcV.ViewModel;
 
@@ -99,6 +100,58 @@ namespace SentinelMvcV.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+
+
+        [HttpGet]
+        public IActionResult IzinMazeretListesi()
+        {
+            if (jwtToken != null && user > 0)
+            {
+                PersonelService.SetToken = jwtToken;
+                IzinMazeretViewModel viewModel = new IzinMazeretViewModel();
+                if (viewModel != null)
+                {
+                    TempData.Add("PersonelListesi", viewModel.PersonelListesi);
+                    TempData.Add("IzinDD", viewModel.IzinDD);
+                    TempData.Add("IzinListesi", viewModel.IzinListesi);
+                    return View(viewModel);
+
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult IzinCrud(IzinMazeretViewModel dto)
+        {
+            if (jwtToken != null && user > 0)
+            {
+                PersonelService.SetToken = jwtToken;
+                if (dto.CrudIzin.Id == 0)
+                {
+                    if (dto.CrudIzin.BaslangicTarihi > dto.CrudIzin.BitisTarihi)
+                    {
+                        TempData.Add("FailedMessage", "izin tarihleri hatalı");
+                        return RedirectToAction("IzinMazeretListesi");
+                    }
+
+                    var result = dto.IzinMazeretAdded(dto.CrudIzin, user);
+                    if (result.Success)
+                        TempData.Add("SuccessMessage", result.Message);
+                    else
+                        TempData.Add("FailedMessage", result.Message);
+                    return RedirectToAction("IzinMazeretListesi");
+                }
+                return RedirectToAction("Index", "Home");
+
+            }
+            return RedirectToAction("Index", "Home");
+
+        }
+
 
     }
 }

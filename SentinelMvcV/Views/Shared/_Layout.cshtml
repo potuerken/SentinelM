@@ -40,7 +40,6 @@
     <script src="~/js/sb-admin-2.min.js"></script>
 
 
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
@@ -58,6 +57,7 @@
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/colreorder/1.5.2/js/dataTables.colReorder.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
+
     <script src="~/js/bootstrap-datepicker.min.js"></script>
     <script src="~/js/bootstrap-datepicker.tr.min.js"></script>
     <script src="~/js/bootstrap-select.min.js"></script>
@@ -104,7 +104,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Personel İşlemleri:</h6>
                         <a id="personelButonu" class="collapse-item" href="@Url.Action("PersonelListesi", "Personel")">Personel</a>
-                        <a class="collapse-item" href="cards.html">İzin / Mazeret</a>
+                        <a id="izinButonu" class="collapse-item" href="@Url.Action("IzinMazeretListesi", "Personel")">İzin / Mazeret</a>
                     </div>
                 </div>
             </li>

@@ -235,5 +235,28 @@ namespace SentinelMvcV.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+
+
+        [HttpGet]
+        public string GetSabitListesi(long id)
+        {
+            string jsonRes = string.Empty;
+            if (jwtToken != null && user > 0)
+            {
+                NobetSistemService.SetToken = jwtToken;
+                NobetSistemViewModel viewModel = new NobetSistemViewModel();
+
+
+                if (viewModel != null)
+                {
+                    if (viewModel.NobetSistemListesi.Count() > 0)
+                    {
+                        var sonuc = viewModel.NobetSistemListesi.Where(q => q.Id == id).Select(s => s.SabitNobetciListesi.Select(x => x.SabitPersonel)).ToList();
+                        jsonRes = JsonConvert.SerializeObject(sonuc[0]);
+                    }
+                }
+            }
+            return jsonRes;
+        }
     }
 }

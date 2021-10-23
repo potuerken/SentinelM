@@ -154,6 +154,7 @@ C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Se
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Home\Index.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Home\Privacy.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\NobetSistem\NobetSistemListesi.cshtml.g.cs
+C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Personel\IzinMazeretListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Personel\PersonelListesi.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Error.cshtml.g.cs
 C:\Users\tuna4lua\source\repos\SentinelM\SentinelMvcV\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_Layout.cshtml.g.cs
