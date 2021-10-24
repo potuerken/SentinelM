@@ -78,6 +78,33 @@ namespace SentinelMvcV.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+        [HttpGet]
+        public IActionResult NobetListesi()
+        {
+            if (jwtToken != null && user > 0)
+            {
+                NobetSistemService.SetToken = jwtToken;
+                NobetListesiViewModel viewModel = new NobetListesiViewModel();
+                if (viewModel != null)
+                {
+                    if (viewModel.NobetSistemListesi.Count() <= 0)
+                    {
+                        TempData.Add("FailedMessage", "aktif bir nöbet sistemi mevcut değil.");
+                        return RedirectToAction("NobetListesi");
+                    }
+                    TempData.Add("NobetListesiDD", viewModel.NobetListesi);
+
+                    TempData.Add("NobetSistemDD", viewModel.NobetSistemListesi);
+                    return View(viewModel);
+
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NobetSistemCrud(NobetSistemViewModel dto)
@@ -207,6 +234,49 @@ namespace SentinelMvcV.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult NobetListesiCrud(NobetListesiViewModel dto)
+        {
+            if (jwtToken != null && user > 0)
+            {
+                try
+                {
+                    NobetSistemService.SetToken = jwtToken;
+                    if (dto.CrudNobetListesi.Id == 0)
+                    {
+                        DateTime currentDate = DateTime.Now;
+                        if (dto.CrudNobetListesi.DenemeTarihi < currentDate)
+                        {
+                            TempData.Add("FailedMessage", "geçmişe yönelik nöbet listesi hazırlanamaz");
+                            return RedirectToAction("NobetListesi");
+                        }
+
+                        dto.CrudNobetListesi.Ay = (short)dto.CrudNobetListesi.DenemeTarihi.Month;
+                        dto.CrudNobetListesi.Yil = (short)dto.CrudNobetListesi.DenemeTarihi.Year;
+
+                        var result = dto.NobetSistemAdded(dto.CrudNobetListesi, user);
+                        if (result.Success)
+                            TempData.Add("SuccessMessage", result.Message);
+                        else
+                            TempData.Add("FailedMessage", result.Message);
+                        return RedirectToAction("NobetListesi");
+
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return RedirectToAction("Index", "Home");
+
+                    throw ex;
+                }
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult NobetSistemSabitlerCrud(NobetSistemViewModel dto)
@@ -238,15 +308,13 @@ namespace SentinelMvcV.Controllers
 
 
         [HttpGet]
-        public string GetSabitListesi(long id)
+        public string GetSabitListesi(int id)
         {
             string jsonRes = string.Empty;
             if (jwtToken != null && user > 0)
             {
                 NobetSistemService.SetToken = jwtToken;
                 NobetSistemViewModel viewModel = new NobetSistemViewModel();
-
-
                 if (viewModel != null)
                 {
                     if (viewModel.NobetSistemListesi.Count() > 0)
@@ -258,5 +326,53 @@ namespace SentinelMvcV.Controllers
             }
             return jsonRes;
         }
+
+        [HttpGet]
+        public string NobetListesiHazirla(int id)
+        {
+            string jsonRes = string.Empty;
+            if (jwtToken != null && user > 0)
+            {
+                NobetSistemService.SetToken = jwtToken;
+                var nobetListesiDetay = NobetSistemService.GetAllNobetListesiDetay(id);
+                if (nobetListesiDetay.Count() == 0)
+                {
+                    //ekleme metodu gelcek
+                }
+                jsonRes = JsonConvert.SerializeObject(nobetListesiDetay[0]);
+
+            }
+            return jsonRes;
+        }
+
+        [HttpGet]
+        public IActionResult NobetListesiDetay(int Id)
+        {
+            if (jwtToken != null && user > 0)
+            {
+                NobetSistemService.SetToken = jwtToken;
+                NobetListesiViewModel viewModel = new NobetListesiViewModel();
+                if (viewModel != null)
+                {
+                    if (viewModel.NobetSistemListesi.Count() <= 0)
+                    {
+                        TempData.Add("FailedMessage", "aktif bir nöbet sistemi mevcut değil.");
+                        return RedirectToAction("NobetListesi");
+                    }
+                    TempData.Add("NobetListesiDD", viewModel.NobetListesi);
+
+                    TempData.Add("NobetSistemDD", viewModel.NobetSistemListesi);
+                    return View(viewModel);
+
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
+
+
     }
 }

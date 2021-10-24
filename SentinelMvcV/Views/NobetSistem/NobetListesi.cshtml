@@ -1,0 +1,403 @@
+﻿@using Check.DTO;
+@using SentinelMvcV.ViewModel;
+@model NobetListesiViewModel
+@{
+    ViewData["Title"] = "Nobet Listesi";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var SuccessMessage = (string)TempData["SuccessMessage"];
+    var FailedMessage = (string)TempData["FailedMessage"];
+
+    List<NobetSistemDTO> nobetSistemListesi = (List<NobetSistemDTO>)TempData["NobetSistemDD"];
+    List<NobetListesiDTO> nobetListesi = (List<NobetListesiDTO>)TempData["NobetListesiDD"];
+
+    List<SelectListItem> nobetSistemList = new List<SelectListItem>();
+    foreach (var item in nobetSistemListesi)
+    {
+        nobetSistemList.Add(new SelectListItem()
+        {
+            Text = item.Ad,
+            Value = item.Id.ToString()
+        });
+    }
+
+}
+
+<!-- #endregion -->
+<!-- #region HTML -->
+<div class="container-fluid">
+    <div class="form-group">
+        <div class="row">
+            <div class="col-md-2">
+                <button style="margin-top:10px;" 12345="button" class="btn btn-primary" data-toggle="modal" data-target="#AddedNobetListesiModal" onclick="AddedNobetListesiModalReflesh()">
+                    yeni nöbet listesi oluştur
+                </button>
+            </div>
+        </div>
+        @if (SuccessMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-success" role="alert">
+                <span>@SuccessMessage</span>
+            </div>
+        }
+        @if (FailedMessage != null)
+        {
+            <div style="margin-top:10px;" class="alert alert-danger" role="alert">
+                <span>@FailedMessage</span>
+            </div>
+        }
+        <div class="mb-2"></div>
+
+        <table id="DTNobetListesi" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>SN</th>
+                    <th style="text-align:center">Nobet Sistemi Adı</th>
+                    <th style="text-align:center">ay</th>
+                    <th style="text-align:center">yil</th>
+                    <th style="text-align:center">listeyi hazırla</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (NobetListesiDTO item in nobetListesi)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@item.NobetSistem.Ad</td>
+                        <td>@item.Ay</td>
+                        <td>@item.Yil</td>
+                        <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#AddedNobetListesiModal" onClick="AddedNobetListesiMessage('@item.Id')">Sabitçiler</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<!-- #endregion -->
+<!-- #region Added Modal -->
+@using (Html.BeginForm("NobetListesiCrud", "NobetSistem", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal fade bd-example-modal-lg" id="AddedNobetListesiModal" tabindex="-1" role="dialog" aria-labelledby="AddedNobetListesiModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddedNobetListesiModalLabel">Yeni Nöbet Sistemi Ekleme İşlemi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="AddedNobetListesiModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">nöbet ifa edecek şubeler</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.DropDownListFor(a => a.CrudNobetListesi.NobetSistem.Id,
+                                nobetSistemList,
+                                new
+                                     {
+                                    @class = "form-control",
+                                    @id = "txtNobetSistemAdi",
+                                    @required = "required",
+                                    @placeholder = "sistemi adi",
+                                    data_live_search = "true",
+                                    title = "sistemi adi",
+                                })
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
+                            <div class="col-md-12 font-weight-bold">hazırlanacak nöbet tarihi</div>
+                            <div class="mb-1"></div>
+                            <div class="col-md-12">
+                                @Html.TextBoxFor(a => a.CrudNobetListesi.DenemeTarihi, new { @class = "form-control", @id = "txtNobetListesiTarihi", @placeholder = "ay", @required = "required", @autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="AddedNobetListesiModalReflesh()">Kapat</button>
+                    <button id="AddedNobetListesiModalButton" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- #endregion -->
+@using (Html.BeginForm("NobetSistemSabitlerCrud", "NobetSistem", FormMethod.Post))
+
+{
+    @Html.AntiForgeryToken();
+    @Html.HiddenFor(model => model.NobetListesiId, new { id = "txtNobetSistemIdAdded" })
+
+
+    <div class="modal fade bd-example-modal-lg" id="AddedNSSabitNobetModal" tabindex="-1" role="dialog" aria-labelledby="AddedNSSabitNobetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="AddedNSSabitNobetModalLabel">sabit nöbetçileri ekleme işlemleri</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="SabitNobetciModalReflesh()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="dtNobetciler" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Ad</th>
+                                        <th style="text-align:center">Soyad</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="SabitNobetciModalReflesh()">Kapat</button>
+                    <button id="UpdatedNobSisModalButton" type="submit" class="btn btn-success">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- #region Script -->
+
+<script>
+
+    var tarih = new Date();
+    var yil = tarih.getFullYear();
+    var ay = tarih.getMonth();
+    var gun = tarih.getDate();
+    var saat = tarih.getHours();
+    var dakika = tarih.getMinutes();
+    var saniye = tarih.getSeconds();
+    //var sabitcilerDT;
+
+
+    $(document).ready(function () {
+
+        $('#txtNobetListesiTarihi').datepicker({
+            format: "mm-yyyy",
+            viewMode: "months",
+            minViewMode: "months",
+            autoclose: true,
+            language: "tr"
+
+        });
+
+
+        //$("#txtNSHIciGunduzSaatAdded").mask('00:00-00:00');
+        //$("#txtNSHIciGeceSaatAdded").mask('00:00-00:00');
+        //$("#txtNSHSonuGunduzSaatAdded").mask('00:00-00:00');
+        //$("#txtNSHSonuGeceSaatAdded").mask('00:00-00:00');
+        //$("#txtNSResTatGunduzSaatAdded").mask('00:00-00:00');
+        //$("#txtNSResTatGeceSaatAdded").mask('00:00-00:00');
+
+        //$("#txtNSHIciGunduzNobSayAdded").mask('0');
+        //$("#txtNSHSonuGunduzNobSayAdded").mask('0');
+        //$("#txtNSResTatGunduzNobSayAdded").mask('0');
+        //$("#txtNSHIciGeceNobSayAdded").mask('0');
+        //$("#txtNSHSonuGeceNobSayAdded").mask('0');
+        //$("#txtNSResTatGeceNobSayAdded").mask('0');
+
+        //$("#txtNSHIciGunduzSaatUpdated").mask('00:00-00:00');
+        //$("#txtNSHIciGeceSaatUpdated").mask('00:00-00:00');
+        //$("#txtNSHSonuGunduzSaatUpdated").mask('00:00-00:00');
+        //$("#txtNSHSonuGeceSaatUpdated").mask('00:00-00:00');
+        //$("#txtNSResTatGunduzSaatUpdated").mask('00:00-00:00');
+        //$("#txtNSResTatGeceSaatUpdated").mask('00:00-00:00');
+
+        //$("#txtNSHIciGunduzNobSayUpdated").mask('0');
+        //$("#txtNSHSonuGunduzNobSayUpdated").mask('0');
+        //$("#txtNSResTatGunduzNobSayUpdated").mask('0');
+
+
+        $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
+        $(function () {
+            $('#txtNobetSistemAdi').selectpicker(
+            );
+        });
+
+        //$(function () {
+        //    $('#txtNSRutbeAdded').selectpicker(
+        //    );
+        //});
+
+        //$(function () {
+        //    $('#txtNSSubeUpdated').selectpicker();
+        //});
+
+        //$(function () {
+        //    $('#txtNSRutbeUpdated').selectpicker(
+        //    );
+        //});
+        //$(function () {
+        //    $('#txtNSSabitPersonelAdded').selectpicker(
+        //    );
+        //});
+        //$(function () {
+        //    $('#txtNSSabitNobetSistemiAdded').selectpicker(
+        //    );
+        //});
+
+        var table = $('#DTNobetListesi').DataTable({
+            dom: 'Bfrtip',
+            // Page kaçlı listeler halinde gelmesi için
+            lengthChange: false,
+            // Page li kısmın buton şeklinde görünmesi için
+            lengthMenu: [
+                [10, 25, 50, -1],
+                ['10 Kayıt', '25 Kayıt', '50 Kayıt', 'Tümü']
+            ],
+            // Çıktı Butonları
+            buttons: [
+                { extend: 'copy', text: 'Kopyala' },
+                {
+                    // Çıktının tipi
+                    extend: 'excel',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    text: 'Excel'
+                },
+                // Kaçlı listeler halinde görünsün
+                { extend: 'pageLength', text: 'Görüntülenme' },
+                // PDF olarak çıktı al
+                // PDF olarak çıktı al
+                {
+                    // Çıktının tipi
+                    extend: 'pdf',
+                    // Çıktının hangi kolonlarının görünür olması için
+                    exportOptions: {
+                        columns: [0, 1, 2]
+                    },
+                    // Çıktının dosya ismi
+                    title: 'Personel Listesi ' + gun + '-' + (ay + 1) + '-' + yil + '__' + saat + ':' + dakika + ':' + saniye,
+                    orientation: 'landscape',
+                },
+                // Sütunlardan hangisi görünsün
+                { extend: 'colvis', text: 'Sütun Gizle/Göster' }],
+            language: {
+                "emptyTable": "Mevcut veri yok.",
+                "info": "Toplam _TOTAL_ kayıttan _START_ ile _END_ arasındaki kayıtlar.",
+                "infoEmpty": "Arama sonucu veri bulunamadı.",
+                "infoFiltered": "(toplam _MAX_ kayıt içinde arandı.)",
+                "loadingRecords": "Yükleniyor...",
+                "search": "Ara:",
+                "zeroRecords": "Hiçbir eşleşen kayıt bulunamadı",
+                "paginate": {
+                    "first": "İlk",
+                    "last": "Son",
+                    "next": "Sonraki",
+                    "previous": "Önceki"
+                }
+            },
+            // Alttaki sayfa numaralarının hepsi görünsün
+            "pagingType": "full_numbers",
+            // Sütunların sıralamasını kullanıcının değiştirilebilir olması yapar.
+            colReorder: true,
+            // columnDef özelliğini açar olarak anladım.
+            rowReorder: true,
+            // Targets olarak seçtiğin indeks sıralamasına göre sütunların order özelliği açılır kapanır.
+            columnDefs: [
+                { width: '4%', targets: 0 },
+                { searchable: true, orderable: true, className: 'reorder', targets: [1] },
+                { searchable: false, orderable: false, targets: '_all' }
+            ],
+            "scrollX": true,
+            order: [[1, "asc"]],
+            stateSave: true
+        });
+
+        table.on('order.dt search.dt', function () {
+            table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+                table.cell(cell).invalidate('dom');
+            });
+        }).draw();
+
+
+        // Butonların bootstrap tipi görünürlüğü sağlar
+        table.buttons().container()
+            .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+
+        sabitcilerDT = $('#dtNobetciler').DataTable({
+            dom: 'Bfrtip',
+            lengthChange: false,
+            "columns": [
+                { "data": "TurAdi" },
+                { "data": "Tarih" },
+                { "data": "Saat" },
+                { "data": "Sicil" },
+                { "data": "AdSoyad" },
+                { "data": "CepTelefonu" },
+            ],
+            language: {
+                "emptyTable": "Mevcut veri yok.",
+                "info": "Toplam _TOTAL_ kayıttan _START_ ile _END_ arasındaki kayıtlar.",
+                "infoEmpty": "Arama sonucu veri bulunamadı.",
+                "infoFiltered": "(toplam _MAX_ kayıt içinde arandı.)",
+                "loadingRecords": "Yükleniyor...",
+                "search": "Ara:",
+                "zeroRecords": "Hiçbir eşleşen kayıt bulunamadı",
+                "paginate": {
+                    "first": "İlk",
+                    "last": "Son",
+                    "next": "Sonraki",
+                    "previous": "Önceki"
+                }
+            },
+        });
+
+
+
+        // Menüdeki üst başlığın kalın olması için
+        $("#listUtilitesAnaBaslik").attr('class', 'nav-item active');
+        // Menünün tüm alt başlıklarını açık tutmak için
+        $("#utilitesMenusu").attr('class', 'collapse show');
+        // Seçilen alt başlığın baskın olması için
+        $("#nobetListesiButonu").attr('class', 'collapse-item active');
+        // Seçildiğinde okun aşağı doğru bakması için
+        $("#utilitesOkYonu").toggleClass('collapsed');
+    });
+
+    function AddedNobetListesiModalReflesh() {
+        $("#txtNobetSistemAdi").selectpicker('val', null);
+        $("#txtNobetListesiTarihi").val(null);
+
+    }
+    function SabitNobetciModalReflesh() {
+        $("#txtNobetSistemIdAdded").val(null);
+    }
+
+
+    function AddedNobetListesiMessage(id) {
+        $("#txtNobetSistemIdAdded").val(id);
+
+        $.ajax({
+            type: "GET",
+            data: { id: id },
+            url: "../NobetSistem/NobetListesiHazirla",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                sabitcilerDT.clear();
+                sabitcilerDT.rows.add(response);
+                sabitcilerDT.draw();
+
+            }
+        });
+    }
+</script>
+
+<!-- #endregion -->

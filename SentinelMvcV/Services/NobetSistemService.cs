@@ -30,9 +30,45 @@ namespace SentinelMvcV.Services
             return null;
         }
 
+
+        public static List<NobetListesiDTO> GetAllNobetListesi()
+        {
+            jsonData = WebApiServices.GetAll("nobetsistem", "getnobetlistesi").Result;
+            if (jsonData != null)
+            {
+                var nobetList = JsonConvert.DeserializeObject<List<NobetListesiDTO>>(jsonData);
+                return nobetList;
+            }
+            return null;
+        }
+
+
+        public static List<NobetListesiDetayDTO> GetAllNobetListesiDetay(int Id)
+        {
+            jsonData = WebApiServices.GetSingle("nobetsistem", "getnobetlistesidetay", "?Id=", Id).Result;
+            if (jsonData != null)
+            {
+                var nobetList = JsonConvert.DeserializeObject<List<NobetListesiDetayDTO>>(jsonData);
+                return nobetList;
+            }
+            return null;
+        }
+
         public static ServiceResult SistemAdded(NobetSistemDTO dto)
         {
             jsonData = WebApiServices.Post("nobetsistem", "nobetsistemadded", dto).Result;
+            if (jsonData != null)
+            {
+                var sistemAdded = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
+                return sistemAdded;
+            }
+            return null;
+        }
+
+
+        public static ServiceResult ListeAdd(NobetListesiDTO dto)
+        {
+            jsonData = WebApiServices.Post("nobetsistem", "nobetlisteadded", dto).Result;
             if (jsonData != null)
             {
                 var sistemAdded = JsonConvert.DeserializeObject<ServiceResult>(jsonData);
@@ -62,6 +98,10 @@ namespace SentinelMvcV.Services
             }
             return null;
         }
+
+
+
+
 
     }
 }

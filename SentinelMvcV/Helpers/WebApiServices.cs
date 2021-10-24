@@ -62,7 +62,7 @@ namespace SentinelMvcV.Helpers
             }
         }
 
-        public static async Task<string> GetSingle(string controller, string action, string parametreName, short id)
+        public static async Task<string> GetSingle(string controller, string action, string parametreName, int id)
         {
             serviceUrl = $"{url}{controller}/{action}/{parametreName}{id}";
             using (var response = await client.GetAsync(serviceUrl))
@@ -104,11 +104,13 @@ namespace SentinelMvcV.Helpers
 
             using (var response = await client.PutAsync(serviceUrl, httpContent))
             {
+              
                 if (response.StatusCode != System.Net.HttpStatusCode.OK)
                 {
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", null);
                     return null;
                 }
+               
                 response.EnsureSuccessStatusCode();
                 return await response.Content.ReadAsStringAsync();
             }
