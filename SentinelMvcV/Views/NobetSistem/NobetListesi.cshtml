@@ -66,7 +66,7 @@
                         <td>@item.NobetSistem.Ad</td>
                         <td>@item.Ay</td>
                         <td>@item.Yil</td>
-                        <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#AddedNobetListesiModal" onClick="AddedNobetListesiMessage('@item.Id')">Sabitçiler</button></td>
+                        <td style="text-align:center"><button type="button" class="btn btn-secondary btn-block" data-toggle="modal" data-target="#AddedNobetListesiModal" onClick="AddedNobetListesiMessage('@item.Id')">nöbeti hazırla</button></td>
                     </tr>
                 }
             </tbody>
@@ -90,29 +90,19 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
-                            <div class="col-md-12 font-weight-bold">nöbet ifa edecek şubeler</div>
-                            <div class="mb-1"></div>
-                            <div class="col-md-12">
-                                @Html.DropDownListFor(a => a.CrudNobetListesi.NobetSistem.Id,
-                                nobetSistemList,
-                                new
-                                     {
-                                    @class = "form-control",
-                                    @id = "txtNobetSistemAdi",
-                                    @required = "required",
-                                    @placeholder = "sistemi adi",
-                                    data_live_search = "true",
-                                    title = "sistemi adi",
-                                })
-                            </div>
-                        </div>
-                        <div class="col-md-6" style="padding-left:10px; padding-right:10px;">
-                            <div class="col-md-12 font-weight-bold">hazırlanacak nöbet tarihi</div>
-                            <div class="mb-1"></div>
-                            <div class="col-md-12">
-                                @Html.TextBoxFor(a => a.CrudNobetListesi.DenemeTarihi, new { @class = "form-control", @id = "txtNobetListesiTarihi", @placeholder = "ay", @required = "required", @autocomplete = "off" })
-                            </div>
+                        <div class="col-md-12">
+                            <table id="dtNobetciler" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>Tarih</th>
+                                        <th>Saat</th>
+                                        <th>Sicil</th>
+                                        <th>AdSoyat</th>
+                                        <th>CepTelefonu</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -330,16 +320,33 @@
             .appendTo('#example_wrapper .col-md-6:eq(0)');
 
 
+
+
+
+
+        // Menüdeki üst başlığın kalın olması için
+        $("#listUtilitesAnaBaslik").attr('class', 'nav-item active');
+        // Menünün tüm alt başlıklarını açık tutmak için
+        $("#utilitesMenusu").attr('class', 'collapse show');
+        // Seçilen alt başlığın baskın olması için
+        $("#nobetListesiButonu").attr('class', 'collapse-item active');
+        // Seçildiğinde okun aşağı doğru bakması için
+        $("#utilitesOkYonu").toggleClass('collapsed');
+
+
+
+
         sabitcilerDT = $('#dtNobetciler').DataTable({
+            "ordering": false,
             dom: 'Bfrtip',
-            lengthChange: false,
+            paging: false,
             "columns": [
-                { "data": "TurAdi" },
-                { "data": "Tarih" },
+                { "data": "TurKod.Ad" },
+                { "data": "STarih" },
                 { "data": "Saat" },
-                { "data": "Sicil" },
-                { "data": "AdSoyad" },
-                { "data": "CepTelefonu" },
+                { "data": "Personel.Sicil" },
+                { "data": "Personel.TamAd" },
+                { "data": "Personel.CepNo" },
             ],
             language: {
                 "emptyTable": "Mevcut veri yok.",
@@ -355,19 +362,8 @@
                     "next": "Sonraki",
                     "previous": "Önceki"
                 }
-            },
+            }
         });
-
-
-
-        // Menüdeki üst başlığın kalın olması için
-        $("#listUtilitesAnaBaslik").attr('class', 'nav-item active');
-        // Menünün tüm alt başlıklarını açık tutmak için
-        $("#utilitesMenusu").attr('class', 'collapse show');
-        // Seçilen alt başlığın baskın olması için
-        $("#nobetListesiButonu").attr('class', 'collapse-item active');
-        // Seçildiğinde okun aşağı doğru bakması için
-        $("#utilitesOkYonu").toggleClass('collapsed');
     });
 
     function AddedNobetListesiModalReflesh() {

@@ -334,12 +334,9 @@ namespace SentinelMvcV.Controllers
             if (jwtToken != null && user > 0)
             {
                 NobetSistemService.SetToken = jwtToken;
-                var nobetListesiDetay = NobetSistemService.GetAllNobetListesiDetay(id);
-                if (nobetListesiDetay.Count() == 0)
-                {
-                    //ekleme metodu gelcek
-                }
-                jsonRes = JsonConvert.SerializeObject(nobetListesiDetay[0]);
+                List<NobetListesiDetayDTO> nobetListesiDetay = NobetSistemService.GetAllNobetListesiDetay(id);
+                var tarih = nobetListesiDetay.OrderBy(a => a.Tarih).OrderBy(a=>a.TurKod.SiraNo);
+                jsonRes = JsonConvert.SerializeObject(tarih);
 
             }
             return jsonRes;

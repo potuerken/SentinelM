@@ -41,7 +41,7 @@ namespace SentinelMvcV.Services
             }
             return null;
         }
-
+        
 
         public static List<NobetListesiDetayDTO> GetAllNobetListesiDetay(int Id)
         {
